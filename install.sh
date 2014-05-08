@@ -23,8 +23,8 @@ serverip=$(wget -qO- http://ipecho.net/plain ; echo)
 
 # Make sure we're running this on a CentOS box
 if [ ! -f /etc/redhat-release ]; then
-  printf "\n${bold}This machine is not running CentOS, terminating installation${normal}"
-  exit 0
+	printf "\n${bold}This machine is not running CentOS, terminating installation${normal}"
+	exit 0
 fi
 
 # Create TS3 user account
@@ -44,26 +44,26 @@ cd /home/ts3user
 
 if [[ ${bit} == *x86_64* ]]; then
 	# You're running 64 bit CentOS
-	printf "\n${bold}64 bit install running${normal}"
+	printf "\n${bold}64 bit install running...${normal}\n"
 	wget http://dl.4players.de/ts/releases/3.0.10.3/teamspeak3-server_linux-amd64-3.0.10.3.tar.gz -O ts3server-64.tar.gz
-  tar -zxvf ts3server-64.tar.gz
-  rm ts3server-64.tar.gz
-  mv teamspeak3-server_linux-amd64 ts3-server
-  cd ts3-server
-  printf "\nMake sure to copy your ${bold}loginname, password, and token${normal} during the next step"
-  printf "\n${bold}Note:${normal} The installer will not continue until you copy the token (CTRL+C)\n"
-  read -p "Press ${bold}[Enter]${normal} to continue..."
+	tar -zxvf ts3server-64.tar.gz
+	rm ts3server-64.tar.gz
+	mv teamspeak3-server_linux-amd64 ts3-server
+	cd ts3-server
+	printf "\nMake sure to copy your ${bold}loginname, password, and token${normal} during the next step"
+	printf "\n${bold}Note:${normal} The installer will not continue until you copy the token (CTRL+C)\n"
+	read -p "Press ${bold}[Enter]${normal} to continue..."
 else 
 	# You're running 32 bit CentOS
-	printf "\n${bold}32 bit install running${normal}"
+	printf "\n${bold}32 bit install running...${normal}\n"
 	wget http://dl.4players.de/ts/releases/3.0.10.3/teamspeak3-server_linux-x86-3.0.10.3.tar.gz -O ts3server-32.tar.gz
 	tar -zxvf ts3server-32.tar.gz
-  rm ts3server-32.tar.gz
-  mv teamspeak3-server_linux-x86 ts3-server
-  cd ts3-server
-  printf "\nMake sure to copy your ${bold}loginname, password, and token${normal} during the next step"
-  printf "\n${bold}Note:${normal} The installer will not continue until you copy the token (CTRL+C)\n"
-  read -p "Press ${bold}[Enter]${normal} to continue..."
+	rm ts3server-32.tar.gz
+	mv teamspeak3-server_linux-x86 ts3-server
+	cd ts3-server
+	printf "\nMake sure to copy your ${bold}loginname, password, and token${normal} during the next step"
+	printf "\n${bold}Note:${normal} The installer will not continue until you copy the token (CTRL+C)\n"
+	read -p "Press ${bold}[Enter]${normal} to continue..."
 fi
 
 # Create ini file
@@ -118,7 +118,7 @@ esac" > /etc/rc.d/init.d/teamspeak
 # Change permissions on Teamspeak service file
 chmod 755 /etc/rc.d/init.d/teamspeak
 
-# Change permissions on the teamspeak files
+# Change permissions and ownership on the teamspeak files
 chown -R ts3user:ts3user /home/ts3user
 chmod +x /home/ts3user/ts3-server/ts3server_startscript.sh
 
