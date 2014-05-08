@@ -35,6 +35,8 @@ Teamspeak service file is located @ /etc/rc.d/init.d/teamspeak
 Usage
 ---------
 
+<strong>Note:</strong> Teamspeak Server automatically starts @ server boot in instances of restarts or system crashes.
+
 Start Teamspeak Server: ```service teamspeak start```
 
 Stop Teamspeak Server: ```service teamspeak stop```
