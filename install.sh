@@ -3,7 +3,7 @@
 # Install Teamspeak 3
 scriptversion="1.1.5"
 teamspeakversion="3.0.10.3"
-scriptname="install.teamspeak"
+scriptname="install"
 # randomessence 27/04/2013
 #
 # wget -qO ~/install.teamspeak.sh http://git.io/aOACkQ && bash ~/install.teamspeak.sh
