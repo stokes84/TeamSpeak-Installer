@@ -24,7 +24,7 @@ serverip=$(wget -qO- http://ipecho.net/plain ; echo)
 
 # Make sure we're running this on a CentOS box
 if [ ! -f /etc/redhat-release ]; then
-	printf "\n${alert}This machine is not running CentOS, terminating installation${normal}"
+	printf "\n${alert}This machine is not running CentOS, terminating installation${normal}\n"
 	exit 0
 fi
 
