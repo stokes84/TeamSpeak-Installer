@@ -1,5 +1,6 @@
-<h1 align='center'>Teamspeak 3 Server Installer</p>
+<h1 align='center'>Teamspeak 3 Server Installer</h1>
 
+<br>
 
 Compatiblity
 ----------------
