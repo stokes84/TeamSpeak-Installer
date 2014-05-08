@@ -6,6 +6,7 @@ Compatiblity
 ----------------
 + CentOS 6.x 32bit
 + CentOS 6.x 64bit
++ Not Tested on CentOS 5.x
 
 <br/>
 
@@ -26,19 +27,21 @@ Install
 ```
 wget -q https://raw.githubusercontent.com/stokes84/Teamspeak-Installer/master/install.sh && bash install.sh && rm -f install.sh
 ```
+Teamspeak application files are located @ /home/ts3user/ts3-server<br/>
+Teamspeak service file is located @ /etc/rc.d/init.d/teamspeak
 
 <br/>
 
 Usage
 ---------
 
-```service teamspeak start```
+Start Teamspeak Server: ```service teamspeak start```
 
-```service teamspeak stop```
+Stop Teamspeak Server: ```service teamspeak stop```
 
-```service teamspeak restart```
+Restart Teamspeak Server: ```service teamspeak restart```
 
-```service teamspeak status```
+Show Teamspeak Server Status: ```service teamspeak status```
 
 <br/>
 
