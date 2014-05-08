@@ -6,7 +6,7 @@ teamspeakversion="3.0.10.3"
 scriptname="install"
 # randomessence 27/04/2013
 #
-# wget -qO ~/install.teamspeak.sh http://git.io/aOACkQ && bash ~/install.teamspeak.sh
+# wget -qO ~/install.teamspeak.sh http://git.io/JPe5NA && bash ~/install.teamspeak.sh
 #
 # bash ~/private/teamspeak/ts3server_startscript.sh start
 # bash ~/private/teamspeak/ts3server_startscript.sh stop
@@ -47,7 +47,8 @@ qport=$(shuf -i 40001-50000 -n 1)
 # qport is the query port: vport + 2 used in the sed commands
 teamspeakfv="http://dl.4players.de/ts/releases/3.0.10.3/teamspeak3-server_linux-amd64-3.0.10.3.tar.gz"
 #
-scripturl="https://raw.github.com/stokes84/Teamspeak-Installer/edit/master/install.sh"
+scripturl="https://raw.githubusercontent.com/stokes84/Teamspeak-Installer/master/install.sh"
+#
 ############################
 ####### Variable End #######
 ############################
