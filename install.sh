@@ -1,11 +1,12 @@
 #!/bin/bash
 
-# Stokes84 5/8/14 - https://github.com/stokes84
+# Last Updated - 5/8/14
+# Chris Stokes - https://github.com/stokes84/Teamspeak-Installer
 #
 # Install
 # wget -q https://raw.githubusercontent.com/stokes84/Teamspeak-Installer/master/install.sh && bash install.sh && rm -f install.sh
 #
-# Operation
+# Usage
 # service teamspeak start
 # service teamspeak stop
 # service teamspeak restart
@@ -23,7 +24,7 @@ serverip=$(wget -qO- http://ipecho.net/plain ; echo)
 
 # Make sure we're running this on a CentOS box
 if [ ! -f /etc/redhat-release ]; then
-	printf "\n${bold}This machine is not running CentOS, terminating installation${normal}"
+	printf "\n${alert}This machine is not running CentOS, terminating installation${normal}"
 	exit 0
 fi
 
