@@ -18,15 +18,15 @@ alert=`tput setaf 1`
 info=`tput setaf 3`
 normal=`tput sgr0`
 
-version=$(cat /etc/centos-release)
-bit=$(uname -a)
-serverip=$(wget -qO- http://ipecho.net/plain ; echo)
-
 # Make sure we're running this on a CentOS box
 if [ ! -f /etc/redhat-release ]; then
 	printf "\n${alert}This machine is not running CentOS, terminating installation${normal}\n"
 	exit 0
 fi
+
+version=$(cat /etc/centos-release)
+bit=$(uname -a)
+serverip=$(wget -qO- http://ipecho.net/plain ; echo)
 
 # Create TS3 user account
 printf "\n${bold}Creating Teamspeak 3 system account${normal}\n"
