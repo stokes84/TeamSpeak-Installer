@@ -171,7 +171,7 @@ if [ -f /etc/redhat-release ]; then
 else
 	chmod +x /etc/init.d/teamspeak
 	update-rc.d teamspeak defaults
-	update-rc.d teamspeak enable 2345
+	update-rc.d teamspeak enable 20 2 3 4 5
 fi
 service teamspeak start
 printf "\n${bold}Install Complete!${normal}\n"
