@@ -23,7 +23,7 @@ serverip=$(wget -qO- http://ipecho.net/plain ; echo)
 
 # Create TS3 user account
 printf "\n${bold}Creating Teamspeak 3 system account${normal}\n"
-useradd ts3user -D --base-dir /home/ts3user
+useradd -d /home/ts3user -m ts3user
 
 # Set TS3 account password
 printf "\n${bold}Creating Teamspeak 3 system account password${normal}\n"
