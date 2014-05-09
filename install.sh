@@ -61,7 +61,28 @@ else
 fi
 
 # Create ini file
-/home/ts3user/ts3-server/ts3server_minimal_runscript.sh createinifile=1
+# /home/ts3user/ts3-server/ts3server_minimal_runscript.sh createinifile=1
+
+echo "machine_id=
+default_voice_port=9987
+voice_ip=0.0.0.0
+licensepath=
+filetransfer_port=30033
+filetransfer_ip=0.0.0.0
+query_port=10011
+query_ip=0.0.0.0
+query_ip_whitelist=query_ip_whitelist.txt
+query_ip_blacklist=query_ip_blacklist.txt
+dbplugin=ts3db_sqlite3
+dbpluginparameter=
+dbsqlpath=sql/
+dbsqlcreatepath=create_sqlite/
+dbconnections=10
+logpath=logs
+logquerycommands=0
+dbclientkeepdays=30
+logappend=0
+query_skipbruteforcecheck=0" >> /home/ts3user/ts3-server/ts3server.ini
 
 # Change machine_id to 1
 sed -i -e "s|machine_id=|machine_id=1|g" /home/ts3user/ts3-server/ts3server.ini
