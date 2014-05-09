@@ -110,25 +110,48 @@ sed -i -e "s|query_port=9987|query_port=$ts3queryport|g" /home/ts3user/ts3-serve
 
 printf "\n${bold}Creating Teamspeak 3 service file${normal}\n"
 
-echo "#!/bin/sh
-# chkconfig: 2345 99 10
-cd /home/ts3user/ts3-server
-case \"\$1\" in
-'start')
-su ts3user -c \"/home/ts3user/ts3-server/ts3server_startscript.sh start\"
-;;
-'stop')
-su ts3user -c \"/home/ts3user/ts3-server/ts3server_startscript.sh stop\"
-;;
-'restart')
-su ts3user -c \"/home/ts3user/ts3-server/ts3server_startscript.sh restart\"
-;;
-'status')
-su ts3user -c \"/home/ts3user/ts3-server/ts3server_startscript.sh status\"
-;;
-*)
-echo \"Usage \$0 start|stop|restart|status\"
-esac" > /etc/rc.d/init.d/teamspeak
+# Make sure we're running this on a CentOS box
+if [ -f /etc/redhat-release ]; then
+	echo "#!/bin/sh
+	# chkconfig: 2345 99 10
+	cd /home/ts3user/ts3-server
+	case \"\$1\" in
+	'start')
+	su ts3user -c \"/home/ts3user/ts3-server/ts3server_startscript.sh start\"
+	;;
+	'stop')
+	su ts3user -c \"/home/ts3user/ts3-server/ts3server_startscript.sh stop\"
+	;;
+	'restart')
+	su ts3user -c \"/home/ts3user/ts3-server/ts3server_startscript.sh restart\"
+	;;
+	'status')
+	su ts3user -c \"/home/ts3user/ts3-server/ts3server_startscript.sh status\"
+	;;
+	*)
+	echo \"Usage \$0 start|stop|restart|status\"
+	esac" > /etc/rc.d/init.d/teamspeak
+else
+	echo "#!/bin/sh
+	# chkconfig: 2345 99 10
+	cd /home/ts3user/ts3-server
+	case \"\$1\" in
+	'start')
+	su ts3user -c \"/home/ts3user/ts3-server/ts3server_startscript.sh start\"
+	;;
+	'stop')
+	su ts3user -c \"/home/ts3user/ts3-server/ts3server_startscript.sh stop\"
+	;;
+	'restart')
+	su ts3user -c \"/home/ts3user/ts3-server/ts3server_startscript.sh restart\"
+	;;
+	'status')
+	su ts3user -c \"/home/ts3user/ts3-server/ts3server_startscript.sh status\"
+	;;
+	*)
+	echo \"Usage \$0 start|stop|restart|status\"
+	esac" > /etc/init.d/teamspeak
+fi
 
 # Change permissions on Teamspeak service file
 chmod 755 /etc/rc.d/init.d/teamspeak
