@@ -37,7 +37,7 @@ cd /home/ts3user
 cd /home/ts3user
 
 if [[ ${bit} == *x86_64* ]]; then
-	# You're running 64 bit CentOS
+	# You're running 64 bit
 	printf "\n${bold}64 bit install running...${normal}\n"
 	wget http://dl.4players.de/ts/releases/3.0.10.3/teamspeak3-server_linux-amd64-3.0.10.3.tar.gz -O ts3server-64.tar.gz
 	tar -zxvf ts3server-64.tar.gz
@@ -48,7 +48,7 @@ if [[ ${bit} == *x86_64* ]]; then
 	printf "\n${bold}Note:${normal} The installer will not continue until you copy the token (CTRL+C)\n"
 	read -p "Press ${bold}[Enter]${normal} to continue..."
 else 
-	# You're running 32 bit CentOS
+	# You're running 32 bit
 	printf "\n${bold}32 bit install running...${normal}\n"
 	wget http://dl.4players.de/ts/releases/3.0.10.3/teamspeak3-server_linux-x86-3.0.10.3.tar.gz -O ts3server-32.tar.gz
 	tar -zxvf ts3server-32.tar.gz
@@ -60,9 +60,7 @@ else
 	read -p "Press ${bold}[Enter]${normal} to continue..."
 fi
 
-# Create ini file
-# /home/ts3user/ts3-server/ts3server_minimal_runscript.sh createinifile=1
-
+# Create the ini file
 echo "machine_id=
 default_voice_port=9987
 voice_ip=0.0.0.0
@@ -110,10 +108,9 @@ sed -i -e "s|query_port=9987|query_port=$ts3queryport|g" /home/ts3user/ts3-serve
 
 printf "\n${bold}Creating Teamspeak 3 service file${normal}\n"
 
-# Make sure we're running this on a CentOS box
+# Setup the Teamspeak service file
 if [ -f /etc/redhat-release ]; then
 	echo "#!/bin/sh
-	# chkconfig: 2345 99 10
 	cd /home/ts3user/ts3-server
 	case \"\$1\" in
 	'start')
@@ -133,7 +130,6 @@ if [ -f /etc/redhat-release ]; then
 	esac" > /etc/rc.d/init.d/teamspeak
 else
 	echo "#!/bin/sh
-	# chkconfig: 2345 99 10
 	cd /home/ts3user/ts3-server
 	case \"\$1\" in
 	'start')
@@ -153,9 +149,6 @@ else
 	esac" > /etc/init.d/teamspeak
 fi
 
-# Change permissions on Teamspeak service file
-# chmod 755 /etc/rc.d/init.d/teamspeak
-
 # Change permissions and ownership on the teamspeak files
 chown -R ts3user:ts3user /home/ts3user
 chmod +x /home/ts3user/ts3-server/ts3server_startscript.sh
@@ -164,7 +157,7 @@ chmod +x /home/ts3user/ts3-server/ts3server_startscript.sh
 echo "tmpfs /dev/shm tmpfs defaults 0 0" >> /etc/fstab
 mount -t tmpfs tmpfs /dev/shm
 
-# Make Teamspeak a service and boot at startup
+# Initiate the Teamspeak service and boot at startup
 if [ -f /etc/redhat-release ]; then
 	chmod +x /etc/rc.d/init.d/teamspeak
 	chkconfig --add teamspeak
