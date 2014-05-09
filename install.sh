@@ -169,8 +169,9 @@ if [ -f /etc/redhat-release ]; then
 	chkconfig --add teamspeak
 	chkconfig --level 2345 teamspeak on
 else
+	chmod +x /etc/init.d/teamspeak
 	update-rc.d teamspeak defaults
-	update-rc.d teamspeak start 20 3 4 5
+	update-rc.d teamspeak enable 2345
 fi
 service teamspeak start
 printf "\n${bold}Install Complete!${normal}\n"
