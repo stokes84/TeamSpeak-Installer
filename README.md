@@ -4,9 +4,10 @@
 
 Compatiblity
 ----------------
-+ CentOS 6.x 32bit
-+ CentOS 6.x 64bit
-+ Not Tested on CentOS 5.x
++ CentOS 6.x 32bit or 64bit
++ Ubuntu 12.04 32bit or 64bit
++ Not Tested on CentOS < 6.5
++ Not Tested on Ubuntu > 12.04
 
 <br/>
 
