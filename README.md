@@ -52,7 +52,11 @@ Uninstall
 -------------
 
 #### CentOS
-```service teamspeak stop && userdel -r ts3user && rm -f /etc/rc.d/init.d/teamspeak```
+```
+service teamspeak stop && userdel -r ts3user && rm -f /etc/rc.d/init.d/teamspeak
+```
 
 #### Ubuntu
-```service teamspeak stop && userdel -r ts3user && update-rc.d -f teamspeak remove && rm -f /etc/init.d/teamspeak```
+```
+service teamspeak stop && userdel -r ts3user && update-rc.d -f teamspeak remove && rm -f /etc/init.d/teamspeak
+```
