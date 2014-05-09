@@ -29,7 +29,7 @@ Install
 wget -q https://raw.githubusercontent.com/stokes84/Teamspeak-Installer/master/install.sh && bash install.sh && rm -f install.sh
 ```
 <strong>Note:</strong> Teamspeak application files are located @ /home/ts3user/ts3-server<br/>
-<strong>Note:</strong> Teamspeak service file is located @ /etc/rc.d/init.d/teamspeak (CentOS or /etc/init.d/teamspeak (Ubuntu) <br/>
+<strong>Note:</strong> Teamspeak service file is located @ /etc/rc.d/init.d/teamspeak (CentOS) or /etc/init.d/teamspeak (Ubuntu) <br/>
 <strong>Pro Tip:</strong> Press CTRL+C @ token screens during install to continue
 
 <br/>
