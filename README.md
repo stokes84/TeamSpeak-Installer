@@ -51,5 +51,8 @@ Show Teamspeak Server Status: ```service teamspeak status```
 Uninstall
 -------------
 
-#### Run the following one liner as root
+#### CentOS
 ```service teamspeak stop && userdel -r ts3user && rm -f /etc/rc.d/init.d/teamspeak```
+
+#### Ubuntu
+```service teamspeak stop && userdel -r ts3user && update-rc.d -f teamspeak remove && rm -f /etc/init.d/teamspeak```
