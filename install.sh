@@ -154,7 +154,7 @@ else
 fi
 
 # Change permissions on Teamspeak service file
-chmod 755 /etc/rc.d/init.d/teamspeak
+# chmod 755 /etc/rc.d/init.d/teamspeak
 
 # Change permissions and ownership on the teamspeak files
 chown -R ts3user:ts3user /home/ts3user
@@ -166,6 +166,7 @@ mount -t tmpfs tmpfs /dev/shm
 
 # Make Teamspeak a service and boot at startup
 if [ -f /etc/redhat-release ]; then
+	chmod +x /etc/rc.d/init.d/teamspeak
 	chkconfig --add teamspeak
 	chkconfig --level 2345 teamspeak on
 else
