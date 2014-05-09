@@ -165,8 +165,13 @@ echo "tmpfs /dev/shm tmpfs defaults 0 0" >> /etc/fstab
 mount -t tmpfs tmpfs /dev/shm
 
 # Make Teamspeak a service and boot at startup
-chkconfig --add teamspeak
-chkconfig --level 2345 teamspeak on
+if [ -f /etc/redhat-release ]; then
+	chkconfig --add teamspeak
+	chkconfig --level 2345 teamspeak on
+else
+	update-rc.d teamspeak defaults
+	update-rc.d teamspeak start 20 3 4 5
+fi
 service teamspeak start
 printf "\n${bold}Install Complete!${normal}\n"
 printf "\n${bold}Teamspeak 3 is running @ $serverip:$ts3voiceport${normal}\n"
