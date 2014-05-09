@@ -34,8 +34,8 @@ chmod 755 /home/ts3user
 
 # Go to the ts3user directory
 cd /home/ts3user
-cd /home/ts3user
 
+# Download, unpack, and install the Teamspeak application
 if [[ ${bit} == *x86_64* ]]; then
 	# You're running 64 bit
 	printf "\n${bold}64 bit install running...${normal}\n"
