@@ -2,7 +2,7 @@
 
 <br>
 
-Compatibility
+Compatibility / Tested
 ----------------
 + CentOS 6.x 32bit or 64bit
 + Ubuntu 12.04 32bit or 64bit
