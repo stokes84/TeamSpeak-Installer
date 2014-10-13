@@ -19,7 +19,7 @@ info=`tput setaf 3`
 normal=`tput sgr0`
 
 bit=$(uname -a)
-serverip=$(wget -qO- http://ipecho.net/plain ; echo)
+serverip=$(wget -qO- http://icanhazip.com ; echo)
 
 # Create TS3 user account
 printf "\n${bold}Creating Teamspeak 3 system account${normal}\n"
