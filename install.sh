@@ -39,7 +39,7 @@ cd /home/ts3user
 if [[ ${bit} == *x86_64* ]]; then
 	# You're running 64 bit
 	printf "\n${bold}64 bit install running...${normal}\n"
-	wget http://dl.4players.de/ts/releases/3.0.10.3/teamspeak3-server_linux-amd64-3.0.10.3.tar.gz -O ts3server-64.tar.gz
+	wget http://dl.4players.de/ts/releases/3.0.11/teamspeak3-server_linux-amd64-3.0.11.tar.gz -O ts3server-64.tar.gz
 	tar -zxvf ts3server-64.tar.gz
 	rm ts3server-64.tar.gz
 	mv teamspeak3-server_linux-amd64 ts3-server
@@ -50,7 +50,7 @@ if [[ ${bit} == *x86_64* ]]; then
 else 
 	# You're running 32 bit
 	printf "\n${bold}32 bit install running...${normal}\n"
-	wget http://dl.4players.de/ts/releases/3.0.10.3/teamspeak3-server_linux-x86-3.0.10.3.tar.gz -O ts3server-32.tar.gz
+	wget http://dl.4players.de/ts/releases/3.0.11/teamspeak3-server_linux-x86-3.0.11.tar.gz -O ts3server-32.tar.gz
 	tar -zxvf ts3server-32.tar.gz
 	rm ts3server-32.tar.gz
 	mv teamspeak3-server_linux-x86 ts3-server
