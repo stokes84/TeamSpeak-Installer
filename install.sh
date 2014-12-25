@@ -21,19 +21,24 @@ normal=`tput sgr0`
 bit=$(uname -a)
 serverip=$(wget -qO- http://ipecho.net/plain ; echo)
 
-# Create TS3 user account
-printf "\n${bold}Creating Teamspeak 3 system account${normal}\n"
-useradd -d /home/ts3user -m ts3user
+# For future use in setting up multiple instances
+if id -u ts3user >/dev/null 2>&1; then
+        echo "TS3 system account already configured, skipping to server setup..."
+else
+	# Create TS3 user account
+	printf "\n${bold}Creating Teamspeak 3 system account${normal}\n"
+	useradd -d /home/ts3user -m ts3user
 
-# Set TS3 account password
-printf "\n${bold}Creating Teamspeak 3 system account password${normal}\n"
-passwd ts3user
+	# Set TS3 account password
+	printf "\n${bold}Creating Teamspeak 3 system account password${normal}\n"
+	passwd ts3user
 
-# Set permissions on the new ts3user directory
-chmod 755 /home/ts3user
+	# Set permissions on the new ts3user directory
+	chmod 755 /home/ts3user
 
-# Go to the ts3user directory
-cd /home/ts3user
+	# Go to the ts3user directory
+	cd /home/ts3user
+fi
 
 # Download, unpack, and install the Teamspeak application
 if [[ ${bit} == *x86_64* ]]; then
