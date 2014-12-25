@@ -97,7 +97,7 @@ sed -i -e "s|filetransfer_ip=0.0.0.0|filetransfer_ip=$serverip|g" /home/ts3user/
 sed -i -e "s|query_ip=0.0.0.0|query_ip=$serverip|g" /home/ts3user/ts3server/ts3server.ini
 
 # Edits the startup script to load the ini file
-sed -i 's|COMMANDLINE_PARAMETERS="${2}"|COMMANDLINE_PARAMETERS="${2} inifile=ts3server.ini"|g' /home/ts3user/ts3server/ts3server_startscript.sh
+sed -i 's|COMMANDLINE_PARAMETERS="${2}"|COMMANDLINE_PARAMETERS="${2} inifile=ts3server.ini"|g' /home/ts3user/ts3server/ts3client_runscript.sh
 
 read -e -p "Teamspeak 3 Server Voice Port: " -i "9987" ts3voiceport
 sed -i -e "s|default_voice_port=9987|default_voice_port=$ts3voiceport|g" /home/ts3user/ts3server/ts3server.ini
@@ -116,16 +116,16 @@ if [ -f /etc/redhat-release ]; then
 	cd /home/ts3user/ts3server
 	case \"\$1\" in
 	'start')
-	su ts3user -c \"/home/ts3user/ts3server/ts3server_startscript.sh start\"
+	su ts3user -c \"/home/ts3user/ts3server/ts3client_runscript.sh start\"
 	;;
 	'stop')
-	su ts3user -c \"/home/ts3user/ts3server/ts3server_startscript.sh stop\"
+	su ts3user -c \"/home/ts3user/ts3server/ts3client_runscript.sh stop\"
 	;;
 	'restart')
-	su ts3user -c \"/home/ts3user/ts3server/ts3server_startscript.sh restart\"
+	su ts3user -c \"/home/ts3user/ts3server/ts3client_runscript.sh restart\"
 	;;
 	'status')
-	su ts3user -c \"/home/ts3user/ts3server/ts3server_startscript.sh status\"
+	su ts3user -c \"/home/ts3user/ts3server/ts3client_runscript.sh status\"
 	;;
 	*)
 	echo \"Usage \$0 start|stop|restart|status\"
@@ -135,16 +135,16 @@ else
 	cd /home/ts3user/ts3server
 	case \"\$1\" in
 	'start')
-	su ts3user -c \"/home/ts3user/ts3server/ts3server_startscript.sh start\"
+	su ts3user -c \"/home/ts3user/ts3server/ts3client_runscript.sh start\"
 	;;
 	'stop')
-	su ts3user -c \"/home/ts3user/ts3server/ts3server_startscript.sh stop\"
+	su ts3user -c \"/home/ts3user/ts3server/ts3client_runscript.sh stop\"
 	;;
 	'restart')
-	su ts3user -c \"/home/ts3user/ts3server/ts3server_startscript.sh restart\"
+	su ts3user -c \"/home/ts3user/ts3server/ts3client_runscript.sh restart\"
 	;;
 	'status')
-	su ts3user -c \"/home/ts3user/ts3server/ts3server_startscript.sh status\"
+	su ts3user -c \"/home/ts3user/ts3server/ts3client_runscript.sh status\"
 	;;
 	*)
 	echo \"Usage \$0 start|stop|restart|status\"
@@ -153,7 +153,7 @@ fi
 
 # Change permissions and ownership on the teamspeak files
 chown -R ts3user:ts3user /home/ts3user
-chmod +x /home/ts3user/ts3server/ts3server_startscript.sh
+chmod +x /home/ts3user/ts3server/ts3client_runscript.sh
 
 # Fixing common error @ http://forum.teamspeak.com/showthread.php/68827-Failed-to-register-local-accounting-service
 echo "tmpfs /dev/shm tmpfs defaults 0 0" >> /etc/fstab
