@@ -21,9 +21,22 @@ normal=`tput sgr0`
 bit=$(uname -a)
 serverip=$(wget -qO- http://ipecho.net/plain ; echo)
 
-# For future use in setting up multiple instances
+### For future use in setting up multiple instances (remove triples hashes from code below)
+### Will require NPL License @ http://npl.teamspeakusa.com/ts3npl.php
+### Will require within script append all instances of ts3server with ${ts3servername} (e.g. ts3server-${ts3servername})
+### Also append service name and init filename
 if id -u ts3user >/dev/null 2>&1; then
+
         echo "TS3 system account already configured, skipping to server setup..."
+        
+        # Go to the ts3user directory
+        cd /home/ts3user
+        
+        ### printf "\n${bold}Note:{normal} Alphanumeric and dashes only, everything else will be trimmed.\n"
+        ### read -e -p "Teamspeak 3 Server Name: " -i "server-name" dirtyts3servername
+	
+	### Only alphanumeric names, we'll make sure of that
+	### export ts3servername="`echo -n "${dirtyts3servername}" | tr -cd '[:alnum:] [:space:]' | tr '[:space:]' '-'  | tr '[:upper:]' '[:lower:]'`"
 else
 	# Create TS3 user account
 	printf "\n${bold}Creating Teamspeak 3 system account${normal}\n"
@@ -38,6 +51,13 @@ else
 
 	# Go to the ts3user directory
 	cd /home/ts3user
+	
+	### printf "\n${bold}Note:{normal} Alphanumeric and dashes only, everything else will be trimmed.\n"
+	### read -e -p "Teamspeak 3 Server Name: " -i "server-name" ts3servername
+	
+	### Only alphanumeric names, we'll make sure of that
+	### export cleants3servername="`echo -n "${ts3servername}" | tr -cd '[:alnum:] [:space:]' | tr '[:space:]' '-'  | tr '[:upper:]' '[:lower:]'`"
+
 fi
 
 # Download, unpack, and install the Teamspeak application
