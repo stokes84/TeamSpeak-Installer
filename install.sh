@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Last Updated - 5/8/14
+# Last Updated - 12/24/14
 # Chris Stokes - https://github.com/stokes84/Teamspeak-Installer
 #
 # Install
@@ -39,10 +39,11 @@ cd /home/ts3user
 if [[ ${bit} == *x86_64* ]]; then
 	# You're running 64 bit
 	printf "\n${bold}64 bit install running...${normal}\n"
-	wget http://dl.4players.de/ts/releases/3.0.11/teamspeak3-server_linux-amd64-3.0.11.tar.gz -O ts3server-64.tar.gz
-	tar -zxvf ts3server-64.tar.gz
-	rm ts3server-64.tar.gz
-	mv teamspeak3-server_linux-amd64 ts3server
+	wget http://dl.4players.de/ts/releases/3.0.16/TeamSpeak3-Client-linux_amd64-3.0.16.run -O TeamSpeak3-64.run
+	chmod +x TeamSpeak3-64.run
+	./TeamSpeak3-64.run
+	rm -f TeamSpeak3-64.run
+	mv TeamSpeak3-Client-linux_amd64 ts3server
 	cd ts3server
 	printf "\nMake sure to copy your ${bold}loginname, password, and token${normal} during the next step"
 	printf "\n${bold}Note:${normal} The installer will not continue until you copy the token (CTRL+C)\n"
@@ -50,10 +51,11 @@ if [[ ${bit} == *x86_64* ]]; then
 else 
 	# You're running 32 bit
 	printf "\n${bold}32 bit install running...${normal}\n"
-	wget http://dl.4players.de/ts/releases/3.0.11/teamspeak3-server_linux-x86-3.0.11.tar.gz -O ts3server-32.tar.gz
-	tar -zxvf ts3server-32.tar.gz
-	rm ts3server-32.tar.gz
-	mv teamspeak3-server_linux-x86 ts3server
+	wget http://dl.4players.de/ts/releases/3.0.16/TeamSpeak3-Client-linux_x86-3.0.16.run -O TeamSpeak3-32.run
+	chmod +x TeamSpeak3-32.run
+	./TeamSpeak3-32.run
+	rm -f TeamSpeak3-32.run
+	mv TeamSpeak3-Client-linux_x86 ts3server
 	cd ts3server
 	printf "\nMake sure to copy your ${bold}loginname, password, and token${normal} during the next step"
 	printf "\n${bold}Note:${normal} The installer will not continue until you copy the token (CTRL+C)\n"
