@@ -19,7 +19,7 @@ info=`tput setaf 3`
 normal=`tput sgr0`
 
 bit=$(uname -a)
-serverip=$(wget -qO- http://icanhazip.com ; echo)
+serverip=$(wget -qO- http://ipecho.net/plain ; echo)
 
 # Create TS3 user account
 printf "\n${bold}Creating Teamspeak 3 system account${normal}\n"
@@ -39,24 +39,24 @@ cd /home/ts3user
 if [[ ${bit} == *x86_64* ]]; then
 	# You're running 64 bit
 	printf "\n${bold}64 bit install running...${normal}\n"
-	wget http://dl.4players.de/ts/releases/3.0.16/TeamSpeak3-Client-linux_amd64-3.0.16.run -O TeamSpeak3-64.run
-	chmod +x TeamSpeak3-64.run
-	./TeamSpeak3-64.run
-	rm -f TeamSpeak3-64.run
-	mv TeamSpeak3-Client-linux_amd64 ts3server
+	wget http://dl.4players.de/ts/releases/3.0.11.2/teamspeak3-server_linux-amd64-3.0.11.2.tar.gz -O teamspeak3-64.tar.gz
+	tar xzf teamspeak3-64.tar.gz
+	rm -f teamspeak3-64.tar.gz
+	mv teamspeak3-server_linux-amd64 ts3server
 	cd ts3server
+	chmod +x ts3server_startscript.sh
 	printf "\nMake sure to copy your ${bold}loginname, password, and token${normal} during the next step"
 	printf "\n${bold}Note:${normal} The installer will not continue until you copy the token (CTRL+C)\n"
 	read -p "Press ${bold}[Enter]${normal} to continue..."
 else 
 	# You're running 32 bit
 	printf "\n${bold}32 bit install running...${normal}\n"
-	wget http://dl.4players.de/ts/releases/3.0.16/TeamSpeak3-Client-linux_x86-3.0.16.run -O TeamSpeak3-32.run
-	chmod +x TeamSpeak3-32.run
-	./TeamSpeak3-32.run
-	rm -f TeamSpeak3-32.run
-	mv TeamSpeak3-Client-linux_x86 ts3server
+	wget http://dl.4players.de/ts/releases/3.0.11.2/teamspeak3-server_linux-x86-3.0.11.2.tar.gz -O teamspeak3-32.tar.gz
+	tar xzf teamspeak3-32.tar.gz
+	rm -f teamspeak3-32.tar.gz
+	mv teamspeak3-server_linux-x86 ts3server
 	cd ts3server
+	chmod +x ts3server_startscript.sh
 	printf "\nMake sure to copy your ${bold}loginname, password, and token${normal} during the next step"
 	printf "\n${bold}Note:${normal} The installer will not continue until you copy the token (CTRL+C)\n"
 	read -p "Press ${bold}[Enter]${normal} to continue..."
@@ -97,7 +97,7 @@ sed -i -e "s|filetransfer_ip=0.0.0.0|filetransfer_ip=$serverip|g" /home/ts3user/
 sed -i -e "s|query_ip=0.0.0.0|query_ip=$serverip|g" /home/ts3user/ts3server/ts3server.ini
 
 # Edits the startup script to load the ini file
-sed -i 's|COMMANDLINE_PARAMETERS="${2}"|COMMANDLINE_PARAMETERS="${2} inifile=ts3server.ini"|g' /home/ts3user/ts3server/ts3client_runscript.sh
+sed -i 's|COMMANDLINE_PARAMETERS="${2}"|COMMANDLINE_PARAMETERS="${2} inifile=ts3server.ini"|g' /home/ts3user/ts3server/ts3server_startscript.sh
 
 read -e -p "Teamspeak 3 Server Voice Port: " -i "9987" ts3voiceport
 sed -i -e "s|default_voice_port=9987|default_voice_port=$ts3voiceport|g" /home/ts3user/ts3server/ts3server.ini
@@ -113,38 +113,44 @@ printf "\n${bold}Creating Teamspeak 3 service file${normal}\n"
 # Setup the Teamspeak service file
 if [ -f /etc/redhat-release ]; then
 	echo "#!/bin/sh
+	# chkconfig: 2345 95 20
+	# description: Control TeamSpeak3 Server
+	# processname: /home/ts3user/ts3server/ts3server_runscript.sh
 	cd /home/ts3user/ts3server
 	case \"\$1\" in
 	'start')
-	su ts3user -c \"/home/ts3user/ts3server/ts3client_runscript.sh start\"
+	su ts3user -c \"/home/ts3user/ts3server/ts3server_startscript.sh start\"
 	;;
 	'stop')
-	su ts3user -c \"/home/ts3user/ts3server/ts3client_runscript.sh stop\"
+	su ts3user -c \"/home/ts3user/ts3server/ts3server_startscript.sh stop\"
 	;;
 	'restart')
-	su ts3user -c \"/home/ts3user/ts3server/ts3client_runscript.sh restart\"
+	su ts3user -c \"/home/ts3user/ts3server/ts3server_startscript.sh restart\"
 	;;
 	'status')
-	su ts3user -c \"/home/ts3user/ts3server/ts3client_runscript.sh status\"
+	su ts3user -c \"/home/ts3user/ts3server/ts3server_startscript.sh status\"
 	;;
 	*)
 	echo \"Usage \$0 start|stop|restart|status\"
 	esac" > /etc/rc.d/init.d/teamspeak
 else
 	echo "#!/bin/sh
+	# chkconfig: 2345 95 20
+	# description: Control TeamSpeak3 Server
+	# processname: /home/ts3user/ts3server/ts3server_runscript.sh
 	cd /home/ts3user/ts3server
 	case \"\$1\" in
 	'start')
-	su ts3user -c \"/home/ts3user/ts3server/ts3client_runscript.sh start\"
+	su ts3user -c \"/home/ts3user/ts3server/ts3server_startscript.sh start\"
 	;;
 	'stop')
-	su ts3user -c \"/home/ts3user/ts3server/ts3client_runscript.sh stop\"
+	su ts3user -c \"/home/ts3user/ts3server/ts3server_startscript.sh stop\"
 	;;
 	'restart')
-	su ts3user -c \"/home/ts3user/ts3server/ts3client_runscript.sh restart\"
+	su ts3user -c \"/home/ts3user/ts3server/ts3server_startscript.sh restart\"
 	;;
 	'status')
-	su ts3user -c \"/home/ts3user/ts3server/ts3client_runscript.sh status\"
+	su ts3user -c \"/home/ts3user/ts3server/ts3server_startscript.sh status\"
 	;;
 	*)
 	echo \"Usage \$0 start|stop|restart|status\"
@@ -153,7 +159,7 @@ fi
 
 # Change permissions and ownership on the teamspeak files
 chown -R ts3user:ts3user /home/ts3user
-chmod +x /home/ts3user/ts3server/ts3client_runscript.sh
+chmod +x /home/ts3user/ts3server/ts3server_startscript.sh
 
 # Fixing common error @ http://forum.teamspeak.com/showthread.php/68827-Failed-to-register-local-accounting-service
 echo "tmpfs /dev/shm tmpfs defaults 0 0" >> /etc/fstab
