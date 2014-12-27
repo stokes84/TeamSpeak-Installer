@@ -49,8 +49,8 @@ else
 	useradd -d /home/ts3user -m ts3user
 
 	# Set TS3 account password
-	printf "\n${bold}Creating Teamspeak 3 system account password${normal}\n"
-	passwd ts3user
+	# printf "\n${bold}Creating Teamspeak 3 system account password${normal}\n"
+	# passwd ts3user
 
 	# Set permissions on the new ts3user directory
 	chmod 755 /home/ts3user
