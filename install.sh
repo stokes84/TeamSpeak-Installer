@@ -193,8 +193,11 @@ chown -R ts3user:ts3user /home/ts3user
 chmod +x /home/ts3user/ts3server/ts3server_startscript.sh
 
 # Fixing common error @ http://forum.teamspeak.com/showthread.php/68827-Failed-to-register-local-accounting-service
-echo "tmpfs /dev/shm tmpfs defaults 0 0" >> /etc/fstab
-mount -t tmpfs tmpfs /dev/shm
+# check if tmpfs is mounted, add entry to fstab if necessary
+if ! mount|grep -q "/dev/shm"; then
+	mount -t tmpfs tmpfs /dev/shm
+	grep -q "/dev/shm" /etc/fstab || echo "tmpfs /dev/shm tmpfs rw 0 0" >> /etc/fstab
+fi
 
 # Initiate the Teamspeak service and boot at startup
 if [ -f /etc/redhat-release ]; then
