@@ -57,24 +57,24 @@ chkconfig --list | grep "teamspeak"
 ```
 Remove each instance as needed
 ```
-service teamspeak-SERVER stop && rm -f /etc/rc.d/init.d/teamspeak-SERVER
+service teamspeak-SERVER stop && chkconfig --del teamspeak-SERVER && rm -f /etc/rc.d/init.d/teamspeak-SERVER
 ```
-Remove everything (stop all services first)
+Remove user lastly if removing all traces of TeamSpeak
 ```
-userdel -r teamspeak && rm -f /etc/rc.d/init.d/teamspeak-*
+userdel -r teamspeak
 ```
 
 
 #### Ubuntu
 List all instances installed
 ```
-service --status-all | grep "teamspeak"
+service --status-all |& grep teamspeak
 ```
 Remove each instance as needed
 ```
 service teamspeak-SERVER stop && update-rc.d -f teamspeak-SERVER remove && rm -f /etc/init.d/teamspeak-SERVER
 ```
-Remove everything (stop all services first)
+Remove user lastly if removing all traces of TeamSpeak
 ```
-userdel -r teamspeak && update-rc.d -f teamspeak-* remove && rm -f /etc/init.d/teamspeak-*
+userdel -r teamspeak
 ```
