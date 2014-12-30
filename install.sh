@@ -42,7 +42,7 @@ if id -u teamspeak >/dev/null 2>&1; then
     printf "\n${bold}TeamSpeak 3 service account(teamspeak) already exists${normal}\n"
 	
 	if ls -d /home/teamspeak/*/ 1> /dev/null 2>&1; then
-		printf "\n${bold}${info}Note: ${normal}Existing TeamSpeak 3 install detected. Make sure you upload your license file to all of your install directories.\n"
+		printf "\n${bold}${info}Note: ${normal}Existing TeamSpeak 3 install detected. Make sure you upload your license file to all of your install directories and ensure port 2008 TCP is open.\n"
 	fi
         
     # Go to the TeamSpeak directory
