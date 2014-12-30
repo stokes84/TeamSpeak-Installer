@@ -211,55 +211,55 @@ done
 
 # Setup the TeamSpeak service file
 if [ -f /etc/redhat-release ]; then
-	echo "#!/bin/sh
-	# chkconfig: 2345 95 20
-	# description: TeamSpeak 3 Server
-	# processname: teamspeak-${servername}
-	cd ${serverdir}/${servername}
-	case \"\$1\" in
-	'start')
-	su teamspeak -c \"${serverdir}/${servername}/ts3server_startscript.sh start\"
-	;;
-	'stop')
-	su teamspeak -c \"${serverdir}/${servername}/ts3server_startscript.sh stop\"
-	;;
-	'restart')
-	su teamspeak -c \"${serverdir}/${servername}/ts3server_startscript.sh restart\"
-	;;
-	'status')
-	su teamspeak -c \"${serverdir}/${servername}/ts3server_startscript.sh status\"
-	;;
-	*)
-	echo \"Usage: teamspeak-${servername} start|stop|restart|status\"
-	esac" > /etc/rc.d/init.d/teamspeak-${servername}
+echo "#!/bin/sh
+# chkconfig: 2345 95 20
+# description: TeamSpeak 3 Server
+# processname: teamspeak-${servername}
+cd ${serverdir}/${servername}
+case \"\$1\" in
+'start')
+su teamspeak -c \"${serverdir}/${servername}/ts3server_startscript.sh start\"
+;;
+'stop')
+su teamspeak -c \"${serverdir}/${servername}/ts3server_startscript.sh stop\"
+;;
+'restart')
+su teamspeak -c \"${serverdir}/${servername}/ts3server_startscript.sh restart\"
+;;
+'status')
+su teamspeak -c \"${serverdir}/${servername}/ts3server_startscript.sh status\"
+;;
+*)
+echo \"Usage: teamspeak-${servername} start|stop|restart|status\"
+esac" > /etc/rc.d/init.d/teamspeak-${servername}
 else
-	echo "#!/bin/sh
-	### BEGIN INIT INFO
-	# Provides: teamspeak-${servername}
-	# Required-Start: networking
-	# Required-Stop:
-	# Default-Start: 2 3 4 5
-	# Default-Stop: 0 1 6
-	# Short-Description: TeamSpeak Server Daemon
-	# Description: Starts/Stops/Restarts the TeamSpeak Server Daemon
-	### END INIT INFO
-	cd ${serverdir}/${servername}
-	case \"\$1\" in
-	'start')
-	su teamspeak -c \"${serverdir}/${servername}/ts3server_startscript.sh start\"
-	;;
-	'stop')
-	su teamspeak -c \"${serverdir}/${servername}/ts3server_startscript.sh stop\"
-	;;
-	'restart')
-	su teamspeak -c \"${serverdir}/${servername}/ts3server_startscript.sh restart\"
-	;;
-	'status')
-	su teamspeak -c \"${serverdir}/${servername}/ts3server_startscript.sh status\"
-	;;
-	*)
-	echo \"Usage: teamspeak-${servername} start|stop|restart|status\"
-	esac" > /etc/init.d/teamspeak-${servername}
+echo "#!/bin/sh
+### BEGIN INIT INFO
+# Provides: teamspeak-${servername}
+# Required-Start: networking
+# Required-Stop:
+# Default-Start: 2 3 4 5
+# Default-Stop: 0 1 6
+# Short-Description: TeamSpeak Server Daemon
+# Description: Starts/Stops/Restarts the TeamSpeak Server Daemon
+### END INIT INFO
+cd ${serverdir}/${servername}
+case \"\$1\" in
+'start')
+su teamspeak -c \"${serverdir}/${servername}/ts3server_startscript.sh start\"
+;;
+'stop')
+su teamspeak -c \"${serverdir}/${servername}/ts3server_startscript.sh stop\"
+;;
+'restart')
+su teamspeak -c \"${serverdir}/${servername}/ts3server_startscript.sh restart\"
+;;
+'status')
+su teamspeak -c \"${serverdir}/${servername}/ts3server_startscript.sh status\"
+;;
+*)
+echo \"Usage: teamspeak-${servername} start|stop|restart|status\"
+esac" > /etc/init.d/teamspeak-${servername}
 fi
 
 # Change permissions and ownership on the TeamSpeak files
