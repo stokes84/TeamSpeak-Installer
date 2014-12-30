@@ -239,7 +239,7 @@ else
 	# Required-Start: networking
 	# Required-Stop:
 	# Default-Start: 2 3 4 5
-	# Default-Stop: S 0 1 6
+	# Default-Stop: 0 1 6
 	# Short-Description: TeamSpeak Server Daemon
 	# Description: Starts/Stops/Restarts the TeamSpeak Server Daemon
 	### END INIT INFO
