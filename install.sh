@@ -234,9 +234,15 @@ if [ -f /etc/redhat-release ]; then
 	esac" > /etc/rc.d/init.d/teamspeak-${servername}
 else
 	echo "#!/bin/sh
-	# chkconfig: 2345 95 20
-	# description: TeamSpeak 3 Server
-	# processname: ${serverdir}/${servername}/ts3server_startscript.sh
+	### BEGIN INIT INFO
+	# Provides:          ${serverdir}/${servername}/ts3server_startscript.sh
+	# Required-Start:    $local_fs $network
+	# Required-Stop:     
+	# Default-Start:     2 3 4 5
+	# Default-Stop:      0 1 6
+	# Short-Description: TeamSpeak 3 Server
+	# Description:       Starts the TeamSpeak 3 Server and all associated services
+	### END INIT INFO
 	cd ${serverdir}/${servername}
 	case \"\$1\" in
 	'start')
