@@ -1,5 +1,5 @@
 #!/bin/bash
-# Last Updated - 12/28/14
+# Last Updated - 12/29/14
 # Chris Stokes - https://github.com/stokes84/Teamspeak-Installer
 #
 # Install Latest
@@ -40,6 +40,10 @@ fi
 if id -u teamspeak >/dev/null 2>&1; then
 
     printf "\n${bold}TeamSpeak 3 service account(teamspeak) already exists${normal}\n"
+	
+	if ls -d /home/teamspeak/*/ 1> /dev/null 2>&1; then
+		printf "\n${bold}${info}Note: ${normal}Existing TeamSpeak 3 install detected. Make sure you upload your license file to all of your install directories.\n"
+	fi
         
     # Go to the TeamSpeak directory
     cd ${serverdir}
@@ -146,6 +150,7 @@ logappend=0
 query_skipbruteforcecheck=0" >> ${serverdir}/${servername}/server.ini
 
 # Insert machine id into the machine_id field
+# useful when running multiple TeamSpeak 3 Server instances on the same database
 printf "${info}${bold}Note:${normal} Leave this blank unless you know what you're doing.\n"
 read -e -p "TeamSpeak 3 Machine ID: " -i "" machineid
 sed -i -e "s|machine_id=|machine_id=$machineid|g" ${serverdir}/${servername}/server.ini
@@ -154,14 +159,17 @@ sed -i -e "s|machine_id=|machine_id=$machineid|g" ${serverdir}/${servername}/ser
 printf "\n${info}${bold}Note:${normal} If installing on a machine with a dynamic IP use 0.0.0.0\n"
 
 # Insert IP into the voice_ip field
+# IP on which the server instance will listen for incoming voice connections
 read -e -p "TeamSpeak 3 Voice IP: " -i "$serverip" voiceip
 sed -i -e "s|voice_ip=0.0.0.0|voice_ip=$voiceip|g" ${serverdir}/${servername}/server.ini
 
 # Insert IP into the filetransfer_ip field
+# IP on which the file transfers are bound to
 read -e -p "TeamSpeak 3 File Transfer IP: " -i "$serverip" fileip
 sed -i -e "s|filetransfer_ip=0.0.0.0|filetransfer_ip=$fileip|g" ${serverdir}/${servername}/server.ini
 
 # Insert IP into the query_ip field
+# IP bound for incoming ServerQuery connections
 read -e -p "TeamSpeak 3 Query IP: " -i "$serverip" queryip
 sed -i -e "s|query_ip=0.0.0.0|query_ip=$queryip|g" ${serverdir}/${servername}/server.ini
 
@@ -169,6 +177,7 @@ sed -i -e "s|query_ip=0.0.0.0|query_ip=$queryip|g" ${serverdir}/${servername}/se
 sed -i 's|COMMANDLINE_PARAMETERS="${2}"|COMMANDLINE_PARAMETERS="${2} inifile=server.ini"|g' ${serverdir}/${servername}/ts3server_startscript.sh
 
 # Set Teamspeak 3 voice port & make sure it's not being used
+# UDP port open for clients to connect to
 while read -e -p "TeamSpeak 3 Server Voice Port: " -i "9987" ts3voiceport; do
 	if [[ -z $(lsof -i :${ts3voiceport}) ]]; then
 		sed -i -e "s|default_voice_port=9987|default_voice_port=$ts3voiceport|g" ${serverdir}/${servername}/server.ini
@@ -179,6 +188,7 @@ while read -e -p "TeamSpeak 3 Server Voice Port: " -i "9987" ts3voiceport; do
 done
 
 # Set Teamspeak 3 server file transfer port & make sure it's not being used
+# TCP Port opened for file transfers
 while read -e -p "TeamSpeak 3 Server File Transfer Port: " -i "30033" ts3fileport; do
 	if [[ -z $(lsof -i :${ts3fileport}) ]]; then
 		sed -i -e "s|filetransfer_port=30033|filetransfer_port=$ts3fileport|g" ${serverdir}/${servername}/server.ini
@@ -188,8 +198,9 @@ while read -e -p "TeamSpeak 3 Server File Transfer Port: " -i "30033" ts3filepor
 	fi
 done
 
-# Set Teamspeak 3 server query port & make sure it's not being used
-while read -e -p "TeamSpeak 3 Server Query Port: " -i "10011" ts3queryport; do
+# Set Teamspeak 3 ServerQuery port & make sure it's not being used
+# TCP Port opened for ServerQuery connections
+while read -e -p "TeamSpeak 3 ServerQuery Port: " -i "10011" ts3queryport; do
 	if [[ -z $(lsof -i :${ts3queryport}) ]]; then
 		sed -i -e "s|query_port=9987|query_port=$ts3queryport|g" ${serverdir}/${servername}/server.ini
 		break
