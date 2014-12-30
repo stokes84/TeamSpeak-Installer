@@ -57,7 +57,11 @@ chkconfig --list | grep "teamspeak"
 ```
 Remove each instance as needed
 ```
-service teamspeak-SERVER stop && userdel -r teamspeak-SERVER && rm -f /etc/rc.d/init.d/teamspeak-SERVER
+service teamspeak-SERVER stop && rm -f /etc/rc.d/init.d/teamspeak-SERVER
+```
+Remove everything (stop all services first)
+```
+userdel -r teamspeak && rm -f /etc/rc.d/init.d/teamspeak-*
 ```
 
 
@@ -68,5 +72,9 @@ service --status-all | grep "teamspeak"
 ```
 Remove each instance as needed
 ```
-service teamspeak-SERVER stop && userdel -r ts3user && update-rc.d -f teamspeak-SERVER remove && rm -f /etc/init.d/teamspeak-SERVER
+service teamspeak-SERVER stop && update-rc.d -f teamspeak-SERVER remove && rm -f /etc/init.d/teamspeak-SERVER
+```
+Remove everything (stop all services first)
+```
+userdel -r teamspeak && update-rc.d -f teamspeak-* remove && rm -f /etc/init.d/teamspeak-*
 ```
