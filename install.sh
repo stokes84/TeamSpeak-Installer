@@ -214,7 +214,7 @@ if [ -f /etc/redhat-release ]; then
 	echo "#!/bin/sh
 	# chkconfig: 2345 95 20
 	# description: TeamSpeak 3 Server
-	# processname: ${serverdir}/${servername}/ts3server_startscript.sh
+	# processname: teamspeak-${servername}
 	cd ${serverdir}/${servername}
 	case \"\$1\" in
 	'start')
@@ -235,13 +235,13 @@ if [ -f /etc/redhat-release ]; then
 else
 	echo "#!/bin/sh
 	### BEGIN INIT INFO
-	# Provides:          ${serverdir}/${servername}/ts3server_startscript.sh
-	# Required-Start:    $local_fs $network
-	# Required-Stop:     $local_fs $network
-	# Default-Start:     2 3 4 5
-	# Default-Stop:      0 1 6
-	# Short-Description: TeamSpeak 3 Server
-	# Description:       Starts the TeamSpeak 3 Server and all associated services
+	# Provides: teamspeak-${servername}
+	# Required-Start: networking
+	# Required-Stop:
+	# Default-Start: 2 3 4 5
+	# Default-Stop: S 0 1 6
+	# Short-Description: TeamSpeak Server Daemon
+	# Description: Starts/Stops/Restarts the TeamSpeak Server Daemon
 	### END INIT INFO
 	cd ${serverdir}/${servername}
 	case \"\$1\" in
