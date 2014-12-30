@@ -14,7 +14,7 @@ Default Ports
 These need to be open and can be changed during install
 + 9987 UDP - Voice
 + 30033 TCP - File Transfer
-+ 10011 TCP - Server Query
++ 10011 TCP - ServerQuery
 + 2008 TCP - License Check (only needed if using a license)
 
 <br/>
@@ -26,24 +26,24 @@ Install
 ```
 wget --no-check-certificate https://raw.githubusercontent.com/stokes84/Teamspeak-Installer/master/install.sh; bash install.sh; rm -f install.sh
 ```
-<strong>Note:</strong> Teamspeak application files are located @ /home/ts3user/ts3server<br/>
-<strong>Note:</strong> Teamspeak service file is located @ /etc/rc.d/init.d/teamspeak (CentOS) or /etc/init.d/teamspeak (Ubuntu) <br/>
-<strong>Pro Tip:</strong> Press CTRL+C @ token screens during install to continue
+<strong>Note:</strong> "SERVER" denotes the server name you set during install.<br/>
+<strong>Note:</strong> Teamspeak application files are located @ /home/teamspeak/SERVER<br/>
+<strong>Note:</strong> Teamspeak service file is located @ /etc/rc.d/init.d/teamspeak-SERVER (CentOS) or /etc/init.d/teamspeak-SERVER (Ubuntu) <br/>
 
 <br/>
 
 Usage
 ---------
 
-<strong>Note:</strong> Teamspeak Server automatically starts @ server boot in instances of restarts or system crashes.
+<strong>Note:</strong> Teamspeak Server instances automatically start @ boot.
 
-Start Teamspeak Server: ```service teamspeak start```
+Start Teamspeak Server: ```service teamspeak-SERVER start```
 
-Stop Teamspeak Server: ```service teamspeak stop```
+Stop Teamspeak Server: ```service teamspeak-SERVER stop```
 
-Restart Teamspeak Server: ```service teamspeak restart```
+Restart Teamspeak Server: ```service teamspeak-SERVER restart```
 
-Show Teamspeak Server Status: ```service teamspeak status```
+Show Teamspeak Server Status: ```service teamspeak-SERVER status```
 
 <br/>
 
@@ -51,11 +51,22 @@ Uninstall
 -------------
 
 #### CentOS
+List all instances installed
 ```
-service teamspeak stop && userdel -r ts3user && rm -f /etc/rc.d/init.d/teamspeak
+chkconfig --list | grep "teamspeak"
+```
+Remove each instance as needed
+```
+service teamspeak-SERVER stop && userdel -r teamspeak-SERVER && rm -f /etc/rc.d/init.d/teamspeak-SERVER
 ```
 
+
 #### Ubuntu
+List all instances installed
 ```
-service teamspeak stop && userdel -r ts3user && update-rc.d -f teamspeak remove && rm -f /etc/init.d/teamspeak
+service --status-all | grep "teamspeak"
+```
+Remove each instance as needed
+```
+service teamspeak-SERVER stop && userdel -r ts3user && update-rc.d -f teamspeak-SERVER remove && rm -f /etc/init.d/teamspeak-SERVER
 ```
