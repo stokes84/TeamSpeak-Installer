@@ -7,6 +7,7 @@ Compatibility
 + CentOS 6/7 32bit or 64bit
 + Ubuntu 12/14 32bit or 64bit
 + Debian 6/7 32bit or 64bit
++ Fedora 19/20 32bit or 64bit
 
 <br/>
 
