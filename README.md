@@ -6,6 +6,7 @@ Compatibility
 ----------------
 + CentOS 6/7 32bit or 64bit
 + Ubuntu 12/14 32bit or 64bit
++ Debian 6/7 32bit or 64bit
 
 <br/>
 
@@ -70,7 +71,7 @@ Remove user lastly if removing all traces of TeamSpeak
 userdel -r teamspeak
 ```
 <br>
-### Ubuntu
+### Ubuntu / Debian
 #### Single Instance (no license)
 ```
 service teamspeak stop && update-rc.d -f teamspeak remove && rm -f /etc/init.d/teamspeak && userdel -r teamspeak
