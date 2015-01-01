@@ -65,7 +65,7 @@ if id -u teamspeak >/dev/null 2>&1; then
 			printf "\n${bold}${info}Note: ${normal}Existing TeamSpeak3 install detected.\n"
 			printf "\nFurther installations will not function without a license\n"
 			printf "\nPlease remove the following installations then restart the installer:\n"
-			ls -d /home/teamspeak/*/ | cut -f1 -d'/'
+			ls -d1 /home/teamspeak/*/ | xargs -n1 basename
 			exit 0
 		fi
 	fi
