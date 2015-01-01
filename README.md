@@ -51,6 +51,13 @@ Uninstall
 -------------
 
 #### CentOS
+<br>
+##### Single Instance (no license)
+```
+service teamspeak stop && chkconfig --del teamspeak && rm -f /etc/rc.d/init.d/teamspeak && userdel -r teamspeak
+```
+
+##### Multi-Instance (licensed)
 List all instances installed
 ```
 chkconfig --list | grep "teamspeak"
@@ -66,6 +73,13 @@ userdel -r teamspeak
 
 
 #### Ubuntu
+<br>
+##### Single Instance (no license)
+```
+service teamspeak stop && update-rc.d -f teamspeak remove && rm -f /etc/init.d/teamspeak && userdel -r teamspeak
+```
+
+##### Multi-Instance (licensed)
 List all instances installed
 ```
 service --status-all |& grep teamspeak
