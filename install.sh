@@ -1,5 +1,5 @@
 #!/bin/bash
-# Last Updated - 12/31/14
+# Last Updated - 1/1/15
 # Chris Stokes - https://github.com/stokes84/Teamspeak-Installer
 #
 # Install Latest
@@ -24,19 +24,21 @@ normal=`tput sgr0`
 
 # Ensure this script is run as root
 if [ "$(id -u)" != "0" ]; then
-    echo "${bold}This script must be run as root${normal}" 1>&2
-    exit 1
+	echo "${bold}This script must be run as root${normal}" 1>&2
+	exit 1
 fi
 
 # Install variables
 serverdir='/home/teamspeak'
 bit=$(uname -a)
 serverip=$(wget -qO- http://ipecho.net/plain ; echo)
+# Backup Public IP Service
+# serverip=$(wget -qO- checkip.dyndns.org|sed -e 's/.*Current IP Address: //' -e 's/<.*$//')
 
-# Clear it in case previous mistake
+# Clear it in case of previous mistake
 unset license
 
-# Install dependencies
+# Install dependencies, currently only lsof for port checking
 if [ -f /etc/redhat-release ]; then
 	printf "\n${bold}Installing dependencies...${normal}\n"
 	yum -y -q install lsof
@@ -46,11 +48,11 @@ else
 fi
 
 # Let's check to see if you have a license to install multiple instances
-read -p $'\x0aDo you have a TeamSpeak 3 license and wish to install multiple instances? ' -n 1 -r
-echo
+read -p $'\x0aDo you have a TeamSpeak 3 license and wish to install multiple instances? (y/n) ' -n 1 -r
+
 if [[ $REPLY =~ ^[Yy]$ ]]
 then
-    license=1
+	license=1
 	printf "\nProceeding with multi instance install process...\n"
 	printf "\nMake sure you upload your license file to each of your install directories and ensure port 2008 TCP is open.\n"
 fi
@@ -58,21 +60,23 @@ fi
 # Check if user exists in case of previous install or multi instance install
 if id -u teamspeak >/dev/null 2>&1; then
 
-    printf "\n${bold}TeamSpeak 3 service account(teamspeak) already exists${normal}\n"
+	printf "\n${bold}TeamSpeak 3 service account(teamspeak) already exists${normal}\n"
 	
+	# If you don't have a license and we see an existing install you gotta go remove that first
 	if [ -z "$license" ]; then 
 		if ls -d /home/teamspeak/*/ 1> /dev/null 2>&1; then
-			printf "\n${bold}${info}Note: ${normal}Existing TeamSpeak3 install detected.\n"
+			printf "\n${bold}Existing TeamSpeak3 install(s) detected.\n"
 			printf "\nFurther installations will not function without a license\n"
-			printf "\nPlease remove the following installations then restart the installer:\n"
+			printf "\nPlease remove the following installations then restart the installer: ${normal}\n"
 			ls -d1 /home/teamspeak/*/ | xargs -n1 basename
 			exit 0
 		fi
 	fi
         
-    # Go to the TeamSpeak directory
-    cd ${serverdir}
+	# Go to the TeamSpeak directory
+    	cd ${serverdir}
     
+	# If you have a license we'll prompt for a custom server name
 	if [ -n "$license" ]; then 
 		# Set TeamSpeak server name
 		printf "\n${bold}${info}Note:${normal} Alphanumeric and dashes only, everything else will be trimmed.\n"
@@ -89,6 +93,7 @@ else
 	# Go to the Teamspeak directory
 	cd ${serverdir}
 	
+	# If you have a license we'll prompt for a custom server name
 	if [ -n "$license" ]; then
 		# Set TeamSpeak server name
 		printf "\n${bold}${info}Note:${normal} Alphanumeric and dashes only, everything else will be trimmed.\n"
@@ -133,10 +138,10 @@ if [[ ${bit} == *x86_64* ]]; then
 	wget --progress=bar:force http://dl.4players.de/ts/releases/3.0.11.2/teamspeak3-server_linux-amd64-3.0.11.2.tar.gz -O teamspeak3-64.tar.gz 2>&1 | progressfilt
 	tar xzf teamspeak3-64.tar.gz
 	rm -f teamspeak3-64.tar.gz
-	if [ -z "$license" ]; then
+	if [ -n "$license" ]; then
 		# If installer was run previously but did not complete
 		if [ -d "${servername}" ]; then
-			printf "Removing existing directory: ${servername}\n\n"
+			printf "${bold}Removing existing directory: ${normal}${servername}\n\n"
 			rm -rf ${servername}
 		fi
 	fi
@@ -149,10 +154,10 @@ else
 	wget --progress=bar:force http://dl.4players.de/ts/releases/3.0.11.2/teamspeak3-server_linux-x86-3.0.11.2.tar.gz -O teamspeak3-32.tar.gz 2>&1 | progressfilt
 	tar xzf teamspeak3-32.tar.gz
 	rm -f teamspeak3-32.tar.
-	if [ -z "$license" ]; then
+	if [ -n "$license" ]; then
 		# If installer was run previously but did not complete
 		if [ -d "${servername}" ]; then
-			printf "Removing existing directory: ${servername}\n\n"
+			printf "${bold}Removing existing directory: ${normal}${servername}\n\n"
 			rm -rf ${servername}
 		fi
 	fi
@@ -163,7 +168,7 @@ fi
 
 printf "${bold}Generating TeamSpeak 3 config file @ ${serverdir}/${chklicense}/server.ini${normal}\n\n"
 
-# Create the ini file
+# Create the default ini file
 echo "machine_id=
 default_voice_port=9987
 voice_ip=0.0.0.0
@@ -246,7 +251,9 @@ while read -e -p "TeamSpeak 3 ServerQuery Port: " -i "10011" ts3queryport; do
 done
 
 # Setup the TeamSpeak service file
+# If CentOS / Fedora
 if [ -f /etc/redhat-release ]; then
+printf "\n${bold}Generating TeamSpeak 3 service @ /etc/rc.d/init.d/teamspeak$([ $license ] && echo "-${servername}")${normal}\n"
 echo "#!/bin/sh
 # chkconfig: 2345 95 20
 # description: TeamSpeak 3 Server
@@ -269,6 +276,8 @@ su teamspeak -c \"${serverdir}/${chklicense}/ts3server_startscript.sh status\"
 echo \"Usage: teamspeak-${servername} start|stop|restart|status\"
 esac" > /etc/rc.d/init.d/teamspeak$([ $license ] && echo "-${servername}")
 else
+# If Ubuntu / Debian
+printf "\n${bold}Generating TeamSpeak 3 service @ /etc/init.d/teamspeak$([ $license ] && echo "-${servername}")${normal}\n"
 echo "#!/bin/sh
 ### BEGIN INIT INFO
 # Provides: teamspeak$([ $license ] && echo "-${servername}")
@@ -298,7 +307,7 @@ echo \"Usage: teamspeak-${servername} start|stop|restart|status\"
 esac" > /etc/init.d/teamspeak$([ $license ] && echo "-${servername}")
 fi
 
-# Change permissions and ownership on the TeamSpeak files
+# Change ownership of all TeamSpeak files to TeamSpeak user and make start script executable
 chown -R teamspeak:teamspeak ${serverdir}
 chmod +x ${serverdir}/${chklicense}/ts3server_startscript.sh
 
@@ -308,7 +317,8 @@ if ! mount|grep -q "/dev/shm"; then
 	mount -t tmpfs tmpfs /dev/shm
 fi
 
-# Initiate the TeamSpeak service and boot at startup
+# Initiate the TeamSpeak service and set to run @ boot
+printf "\n${bold}Adding TeamSpeak 3 to boot sequence and setting runlevels${normal}\n"
 if [ -f /etc/redhat-release ]; then
 	chmod +x /etc/rc.d/init.d/teamspeak$([ $license ] && echo "-${servername}")
 	chkconfig --add teamspeak$([ $license ] && echo "-${servername}")
@@ -318,7 +328,10 @@ else
 	update-rc.d teamspeak$([ $license ] && echo "-${servername}") defaults
 fi
 
+printf "\n${bold}Starting TeamSpeak 3 for the first time${normal}\n"
+# Start the server for the first time and display the loginname, password, and token
 service teamspeak$([ $license ] && echo "-${servername}") start
+# Wait 3 seconds and display some useful info
 sleep 3
 printf "\nInstall Complete"
 printf "\nTeamSpeak 3 is running @ ${bold}$serverip:$ts3voiceport${normal}"
