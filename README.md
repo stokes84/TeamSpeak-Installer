@@ -1,4 +1,4 @@
-<h1 align='center'>Teamspeak 3 Server Installer</h1>
+<h1 align='center'>TeamSpeak 3 Server Installer</h1>
 
 <br>
 
@@ -26,26 +26,28 @@ Install
 
 #### Run the following one liner as root
 ```
-wget --no-check-certificate https://raw.githubusercontent.com/stokes84/Teamspeak-Installer/master/install.sh; bash install.sh; rm -f install.sh
+wget --no-check-certificate https://raw.githubusercontent.com/stokes84/TeamSpeak-Installer/master/install.sh; bash install.sh; rm -f install.sh
 ```
 <strong>Note:</strong> "SERVER" denotes the server name you set during install.<br/>
-<strong>Note:</strong> Teamspeak application files are located @ /home/teamspeak/SERVER<br/>
-<strong>Note:</strong> Teamspeak service file is located @ /etc/rc.d/init.d/teamspeak-SERVER (CentOS) or /etc/init.d/teamspeak-SERVER (Ubuntu) <br/>
+<strong>Note:</strong> TeamSpeak application files are located @ /home/teamspeak/SERVER<br/>
+<strong>Note:</strong> TeamSpeak service file is located @ /etc/rc.d/init.d/teamspeak-SERVER (CentOS) or /etc/init.d/teamspeak-SERVER (Ubuntu) <br/>
 
 <br/>
 
 Usage
 ---------
 
-<strong>Note:</strong> Teamspeak Server instances automatically start @ boot.
+<strong>Note:</strong> TeamSpeak Server instances automatically start @ boot.
 
-Start Teamspeak Server: ```service teamspeak-SERVER start```
+Start TeamSpeak Server: ```service teamspeak-SERVER start```
 
-Stop Teamspeak Server: ```service teamspeak-SERVER stop```
+Stop TeamSpeak Server: ```service teamspeak-SERVER stop```
 
-Restart Teamspeak Server: ```service teamspeak-SERVER restart```
+Restart TeamSpeak Server: ```service teamspeak-SERVER restart```
 
-Show Teamspeak Server Status: ```service teamspeak-SERVER status```
+Show TeamSpeak Server Status: ```service teamspeak-SERVER status```
+
+Monitor TeamSpeak Server (check & start if needed every 5s): ```service teamspeak-SERVER status```
 
 <br/>
 
