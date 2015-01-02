@@ -53,8 +53,9 @@ read -p $'\x0aDo you have a TeamSpeak 3 license and wish to install multiple ins
 if [[ $REPLY =~ ^[Yy]$ ]]
 then
 	license=1
+	printf "\n${bold}Paste your license file here.${normal}\n"
+	read -e -p "TeamSpeak 3 Server License: " -i "" licensefile
 	printf "\nProceeding with multi instance install process...\n"
-	printf "\nMake sure you upload your license file to each of your install directories and ensure port 2008 TCP is open.\n"
 fi
 
 # Check if user exists in case of previous install or multi instance install
@@ -79,8 +80,8 @@ if id -u teamspeak >/dev/null 2>&1; then
 	# If you have a license we'll prompt for a custom server name
 	if [ -n "$license" ]; then 
 		# Set TeamSpeak server name
-		printf "\n${bold}${info}Note:${normal} Alphanumeric and dashes only, everything else will be trimmed.\n"
-		read -e -p "Teamspeak 3 Server Name: " -i "server-name" inputservername
+		printf "\n${bold}${info}Note:${normal} Alphanumeric only, everything else will be trimmed.\n"
+		read -e -p "Teamspeak 3 Server Name: " -i "ServerName" inputservername
 	
 		# Only alphanumeric names with dashes, we'll make sure of that
 		servername="`echo -n "${inputservername}" | tr -cd '[:alnum:] [:space:]' | tr '[:space:]' '-'  | tr '[:upper:]' '[:lower:]'`"
@@ -96,8 +97,8 @@ else
 	# If you have a license we'll prompt for a custom server name
 	if [ -n "$license" ]; then
 		# Set TeamSpeak server name
-		printf "\n${bold}${info}Note:${normal} Alphanumeric and dashes only, everything else will be trimmed.\n"
-		read -e -p "TeamSpeak 3 Server Name: " -i "server-name" inputservername
+		printf "\n${bold}${info}Note:${normal} Alphanumeric only, everything else will be trimmed.\n"
+		read -e -p "TeamSpeak 3 Server Name: " -i "ServerName" inputservername
 	
 		# Only alphanumeric names, we'll make sure of that
 		servername="`echo -n "${inputservername}" | tr -cd '[:alnum:] [:space:]' | tr '[:space:]' '-'  | tr '[:upper:]' '[:lower:]'`"
@@ -190,8 +191,14 @@ dbclientkeepdays=30
 logappend=0
 query_skipbruteforcecheck=0" >> ${serverdir}/${chklicense}/server.ini
 
-# We'll make sure this gets generated
+# We'll make sure a whitelist file is ready
 touch ${serverdir}/${chklicense}/query_ip_whitelist.txt
+
+# Generate the license file
+touch ${serverdir}/${servername}/licensekey.dat
+cat <<EOF > ${serverdir}/${servername}/licensekey.dat
+${licensefile}
+EOF
 
 # Let's make a directory for backups
 mkdir ${serverdir}/${chklicense}/backups
