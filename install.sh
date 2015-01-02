@@ -260,20 +260,19 @@ echo "#!/bin/sh
 # processname: teamspeak$([ $license ] && echo "-${servername}")
 cd ${serverdir}/${chklicense}
 case \"\$1\" in
-'start')
-su teamspeak -c \"${serverdir}/${chklicense}/ts3server_startscript.sh start\"
-;;
-'stop')
-su teamspeak -c \"${serverdir}/${chklicense}/ts3server_startscript.sh stop\"
-;;
-'restart')
-su teamspeak -c \"${serverdir}/${chklicense}/ts3server_startscript.sh restart\"
-;;
-'status')
-su teamspeak -c \"${serverdir}/${chklicense}/ts3server_startscript.sh status\"
-;;
-*)
-echo \"Usage: teamspeak-${servername} start|stop|restart|status\"
+	'start')
+		su teamspeak -c \"${serverdir}/${chklicense}/ts3server_startscript.sh start\";;
+	'stop')
+		su teamspeak -c \"${serverdir}/${chklicense}/ts3server_startscript.sh stop\";;
+	'restart')
+		su teamspeak -c \"${serverdir}/${chklicense}/ts3server_startscript.sh restart\";;
+	'status')
+		su teamspeak -c \"${serverdir}/${chklicense}/ts3server_startscript.sh status\";;
+	'monitor')
+		watch -n 5 "service teamspeak$([ $license ] && echo "-${servername}") start" &>/dev/null &;;
+	*)
+	echo \"Usage: teamspeak-${servername} start|stop|restart|status|monitor\"
+	exit 1;;
 esac" > /etc/rc.d/init.d/teamspeak$([ $license ] && echo "-${servername}")
 else
 # If Ubuntu / Debian
@@ -290,20 +289,19 @@ echo "#!/bin/sh
 ### END INIT INFO
 cd ${serverdir}/${chklicense}
 case \"\$1\" in
-'start')
-su teamspeak -c \"${serverdir}/${chklicense}/ts3server_startscript.sh start\"
-;;
-'stop')
-su teamspeak -c \"${serverdir}/${chklicense}/ts3server_startscript.sh stop\"
-;;
-'restart')
-su teamspeak -c \"${serverdir}/${chklicense}/ts3server_startscript.sh restart\"
-;;
-'status')
-su teamspeak -c \"${serverdir}/${chklicense}/ts3server_startscript.sh status\"
-;;
-*)
-echo \"Usage: teamspeak-${servername} start|stop|restart|status\"
+	'start')
+		su teamspeak -c \"${serverdir}/${chklicense}/ts3server_startscript.sh start\";;
+	'stop')
+		su teamspeak -c \"${serverdir}/${chklicense}/ts3server_startscript.sh stop\";;
+	'restart')
+		su teamspeak -c \"${serverdir}/${chklicense}/ts3server_startscript.sh restart\";;
+	'status')
+		su teamspeak -c \"${serverdir}/${chklicense}/ts3server_startscript.sh status\";;
+	'monitor')
+		watch -n 5 "service teamspeak$([ $license ] && echo "-${servername}") start" &>/dev/null &;;
+	*)
+	echo \"Usage: teamspeak-${servername} start|stop|restart|status|monitor\"
+	exit 1;;
 esac" > /etc/init.d/teamspeak$([ $license ] && echo "-${servername}")
 fi
 
@@ -335,4 +333,4 @@ service teamspeak$([ $license ] && echo "-${servername}") start
 sleep 3
 printf "\nInstall Complete"
 printf "\nTeamSpeak 3 is running @ ${bold}$serverip:$ts3voiceport${normal}"
-printf "\n${bold}Usage:${normal} service teamspeak"$([ $license ] && echo "-${servername}")" start|stop|restart|status\n"
+printf "\n${bold}Usage:${normal} service teamspeak"$([ $license ] && echo "-${servername}")" start|stop|restart|status|monitor\n"
