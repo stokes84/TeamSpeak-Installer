@@ -49,6 +49,8 @@ Show TeamSpeak Server Status: ```service teamspeak-SERVER monitor```
 
 Monitor TeamSpeak Server (check & start if needed every 5s): ```service teamspeak-SERVER status```
 
+Backup TeamSpeak Server (black/white list, ini, and db): ```service teamspeak-SERVER backup```
+
 <br/>
 
 Uninstall
