@@ -190,6 +190,12 @@ dbclientkeepdays=30
 logappend=0
 query_skipbruteforcecheck=0" >> ${serverdir}/${chklicense}/server.ini
 
+# We'll make sure this gets generated
+touch ${serverdir}/${chklicense}/query_ip_whitelist.txt
+
+# Let's make a directory for backups
+mkdir ${serverdir}/${chklicense}/backups
+
 # Insert machine id into the machine_id field
 # useful when running multiple TeamSpeak 3 Server instances on the same database
 printf "${info}${bold}Note:${normal} Leave this blank unless you know what you're doing.\n"
@@ -254,30 +260,45 @@ done
 # If CentOS / Fedora
 if [ -f /etc/redhat-release ]; then
 printf "\n${bold}Generating TeamSpeak 3 service @ /etc/rc.d/init.d/teamspeak$([ $license ] && echo "-${servername}")${normal}\n"
-echo "#!/bin/sh
+cat <<EOF > /etc/rc.d/init.d/teamspeak$([ $license ] && echo "-${servername}")
+#!/bin/sh
 # chkconfig: 2345 95 20
 # description: TeamSpeak 3 Server
 # processname: teamspeak$([ $license ] && echo "-${servername}")
 cd ${serverdir}/${chklicense}
-case \"\$1\" in
+case "\$1" in
 	'start')
-		su teamspeak -c \"${serverdir}/${chklicense}/ts3server_startscript.sh start\";;
+		su teamspeak -c "${serverdir}/${chklicense}/ts3server_startscript.sh start";;
 	'stop')
-		su teamspeak -c \"${serverdir}/${chklicense}/ts3server_startscript.sh stop\";;
+		su teamspeak -c "${serverdir}/${chklicense}/ts3server_startscript.sh stop";;
 	'restart')
-		su teamspeak -c \"${serverdir}/${chklicense}/ts3server_startscript.sh restart\";;
+		su teamspeak -c "${serverdir}/${chklicense}/ts3server_startscript.sh restart";;
 	'status')
-		su teamspeak -c \"${serverdir}/${chklicense}/ts3server_startscript.sh status\";;
+		su teamspeak -c "${serverdir}/${chklicense}/ts3server_startscript.sh status";;
 	'monitor')
 		watch -n 5 "service teamspeak$([ $license ] && echo "-${servername}") start" &>/dev/null &;;
+	'backup')
+		name=backup-\$(date '+%Y-%m-%d-%H%M%S').tar
+		printf "\n"
+		service teamspeak$([ $license ] && echo "-${servername}") stop
+		cd /home/teamspeak/${chklicense}
+		printf "\n\$(tput bold)Backing up @ /home/teamspeak/${chklicense}/backups\$(tput sgr0)\n"
+		tar -cf \${name} query_ip_blacklist.txt ts3server.sqlitedb query_ip_whitelist.txt server.ini
+		printf "\n"
+		service teamspeak$([ $license ] && echo "-${servername}") start
+		mv \${name} /home/teamspeak/${chklicense}/backups/\${name}	
+		printf "\n\$(tput bold)Backup \${name} Complete!\$(tput sgr0)\n"
+	;;
 	*)
-	echo \"Usage: teamspeak-${servername} start|stop|restart|status|monitor\"
+	echo "Usage: teamspeak-${servername} start|stop|restart|status|monitor|backup"
 	exit 1;;
-esac" > /etc/rc.d/init.d/teamspeak$([ $license ] && echo "-${servername}")
+esac
+EOF
 else
 # If Ubuntu / Debian
 printf "\n${bold}Generating TeamSpeak 3 service @ /etc/init.d/teamspeak$([ $license ] && echo "-${servername}")${normal}\n"
-echo "#!/bin/sh
+cat <<EOF > /etc/init.d/teamspeak$([ $license ] && echo "-${servername}")
+#!/bin/sh
 ### BEGIN INIT INFO
 # Provides: teamspeak$([ $license ] && echo "-${servername}")
 # Required-Start: networking
@@ -288,21 +309,34 @@ echo "#!/bin/sh
 # Description: Starts/Stops/Restarts the TeamSpeak Server Daemon
 ### END INIT INFO
 cd ${serverdir}/${chklicense}
-case \"\$1\" in
+case "\$1" in
 	'start')
-		su teamspeak -c \"${serverdir}/${chklicense}/ts3server_startscript.sh start\";;
+		su teamspeak -c "${serverdir}/${chklicense}/ts3server_startscript.sh start";;
 	'stop')
-		su teamspeak -c \"${serverdir}/${chklicense}/ts3server_startscript.sh stop\";;
+		su teamspeak -c "${serverdir}/${chklicense}/ts3server_startscript.sh stop";;
 	'restart')
-		su teamspeak -c \"${serverdir}/${chklicense}/ts3server_startscript.sh restart\";;
+		su teamspeak -c "${serverdir}/${chklicense}/ts3server_startscript.sh restart";;
 	'status')
-		su teamspeak -c \"${serverdir}/${chklicense}/ts3server_startscript.sh status\";;
+		su teamspeak -c "${serverdir}/${chklicense}/ts3server_startscript.sh status";;
 	'monitor')
 		watch -n 5 "service teamspeak$([ $license ] && echo "-${servername}") start" &>/dev/null &;;
+	'backup')
+		name=backup-\$(date '+%Y-%m-%d-%H%M%S').tar
+		printf "\n"
+		service teamspeak$([ $license ] && echo "-${servername}") stop
+		cd /home/teamspeak/${chklicense}
+		printf "\n\$(tput bold)Backing up @ /home/teamspeak/${chklicense}/backups\$(tput sgr0)\n"
+		tar -cf \${name} query_ip_blacklist.txt ts3server.sqlitedb query_ip_whitelist.txt server.ini
+		printf "\n"
+		service teamspeak$([ $license ] && echo "-${servername}") start
+		mv \${name} /home/teamspeak/${chklicense}/backups/\${name}	
+		printf "\n\$(tput bold)Backup \${name} Complete!\$(tput sgr0)\n"
+	;;
 	*)
-	echo \"Usage: teamspeak-${servername} start|stop|restart|status|monitor\"
+	echo "Usage: teamspeak-${servername} start|stop|restart|status|monitor|backup"
 	exit 1;;
-esac" > /etc/init.d/teamspeak$([ $license ] && echo "-${servername}")
+esac
+EOF
 fi
 
 # Change ownership of all TeamSpeak files to TeamSpeak user and make start script executable
