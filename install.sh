@@ -54,7 +54,8 @@ if [[ $REPLY =~ ^[Yy]$ ]]
 then
 	license=1
 	printf "\n${bold}Paste your license file here.${normal}\n"
-	read -e -p "TeamSpeak 3 Server License: " -i "" licensefile
+	read -e -p "TeamSpeak 3 Server License Company Name: " -i "" licensename
+	read -e -p "TeamSpeak 3 Server License Key: " -i "" licensefile
 	printf "\nProceeding with multi instance install process...\n"
 fi
 
@@ -197,6 +198,9 @@ touch ${serverdir}/${chklicense}/query_ip_whitelist.txt
 # Generate the license file
 touch ${serverdir}/${servername}/licensekey.dat
 cat <<EOF > ${serverdir}/${servername}/licensekey.dat
+Company name : ${licensename}
+
+==key==
 ${licensefile}
 EOF
 
