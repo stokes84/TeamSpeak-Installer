@@ -293,12 +293,12 @@ case "\$1" in
 		printf "\n"
 		service teamspeak$([ $license ] && echo "-${servername}") stop
 		cd /home/teamspeak/${chklicense}
-		printf "\n\$(tput bold)Backing up @ /home/teamspeak/${chklicense}/backups\$(tput sgr0)\n"
+		printf "\n\$(tput bold)Backing up @ /home/teamspeak/${chklicense}/backups/\${name}\$(tput sgr0)\n"
 		tar -cf \${name} query_ip_blacklist.txt ts3server.sqlitedb query_ip_whitelist.txt server.ini
 		printf "\n"
 		service teamspeak$([ $license ] && echo "-${servername}") start
 		mv \${name} /home/teamspeak/${chklicense}/backups/\${name}	
-		printf "\n\$(tput bold)Backup \${name} Complete!\$(tput sgr0)\n"
+		printf "\n\$(tput bold)Backup Complete!\$(tput sgr0)\n"
 	;;
 	*)
 	echo "Usage: teamspeak-${servername} start|stop|restart|status|monitor|backup"
@@ -336,12 +336,12 @@ case "\$1" in
 		printf "\n"
 		service teamspeak$([ $license ] && echo "-${servername}") stop
 		cd /home/teamspeak/${chklicense}
-		printf "\n\$(tput bold)Backing up @ /home/teamspeak/${chklicense}/backups\$(tput sgr0)\n"
+		printf "\n\$(tput bold)Backing up @ /home/teamspeak/${chklicense}/backups/\${name}\$(tput sgr0)\n"
 		tar -cf \${name} query_ip_blacklist.txt ts3server.sqlitedb query_ip_whitelist.txt server.ini
 		printf "\n"
 		service teamspeak$([ $license ] && echo "-${servername}") start
 		mv \${name} /home/teamspeak/${chklicense}/backups/\${name}	
-		printf "\n\$(tput bold)Backup \${name} Complete!\$(tput sgr0)\n"
+		printf "\n\$(tput bold)Backup Complete!\$(tput sgr0)\n"
 	;;
 	*)
 	echo "Usage: teamspeak-${servername} start|stop|restart|status|monitor|backup"
