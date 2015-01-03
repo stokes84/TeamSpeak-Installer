@@ -258,7 +258,7 @@ done
 # TCP Port opened for ServerQuery connections
 while read -e -p "TeamSpeak 3 ServerQuery Port: " -i "10011" ts3queryport; do
 	if [[ -z $(lsof -i :${ts3queryport}) ]]; then
-		sed -i -e "s|query_port=9987|query_port=$ts3queryport|g" ${serverdir}/${chklicense}/server.ini
+		sed -i -e "s|query_port=10011|query_port=$ts3queryport|g" ${serverdir}/${chklicense}/server.ini
 		break
 	else 
 		printf "${bold}Port ${ts3queryport} in use, try another port\n${normal}"
