@@ -194,11 +194,11 @@ touch ${serverdir}/${chklicense}/query_ip_whitelist.txt
 
 # Prompt the user to upload the licensekey and don't let them continue until it's there
 while read -n 1 -p "Upload your licensekey.dat to ${serverdir}/${chklicense} and press any key to continue..."; do
-	if [ -f ${serverdir}/${chklicense}/licenskey.dat ]; then
-		printf "${bold}\n${serverdir}/${chklicense}/licenskey.dat detected\n${normal}"
+	if [ -f ${serverdir}/${chklicense}/licensekey.dat ]; then
+		printf "${bold}\n${serverdir}/${chklicense}/licensekey.dat detected\n${normal}"
 		break
 	else 
-		printf "${bold}\n${serverdir}/${chklicense}/licenskey.dat not detected\n${normal}"
+		printf "${bold}\n${serverdir}/${chklicense}/licensekey.dat not detected\n${normal}"
 	fi
 done
 
