@@ -79,7 +79,7 @@ if id -u teamspeak >/dev/null 2>&1; then
 	if [ -n "$license" ]; then 
 		# Set TeamSpeak server name
 		printf "\n${bold}${info}Note:${normal} Alphanumeric only, everything else will be trimmed.\n"
-		read -e -p "Teamspeak 3 Server Name: " -i "ServerName" inputservername
+		read -e -p "Teamspeak 3 Server Name: " -i "" inputservername
 	
 		# Only alphanumeric names with dashes, we'll make sure of that
 		servername="`echo -n "${inputservername}" | tr -cd '[:alnum:] [:space:]' | tr '[:space:]' '-'  | tr '[:upper:]' '[:lower:]'`"
@@ -96,7 +96,7 @@ else
 	if [ -n "$license" ]; then
 		# Set TeamSpeak server name
 		printf "\n${bold}${info}Note:${normal} Alphanumeric only, everything else will be trimmed.\n"
-		read -e -p "TeamSpeak 3 Server Name: " -i "ServerName" inputservername
+		read -e -p "TeamSpeak 3 Server Name: " -i "" inputservername
 	
 		# Only alphanumeric names, we'll make sure of that
 		servername="`echo -n "${inputservername}" | tr -cd '[:alnum:] [:space:]' | tr '[:space:]' '-'  | tr '[:upper:]' '[:lower:]'`"
@@ -378,11 +378,11 @@ then
 	service teamspeak$([ $license ] && echo "-${servername}") start
 	# Wait 3 seconds and display some useful info
 	sleep 3
-	printf "\nInstall Complete"
+	printf "\n\Install Complete"
 	printf "\nTeamSpeak 3 is running @ ${bold}$serverip:$ts3voiceport${normal}"
 	printf "\n${bold}Usage:${normal} service teamspeak"$([ $license ] && echo "-${servername}")" start|stop|restart|status|monitor|backup\n"
 else
-	printf "\nInstall Complete"
+	printf "\n\nInstall Complete"
 	printf "\nTeamSpeak 3 available @ ${bold}$serverip:$ts3voiceport${normal}"
 	printf "\n${bold}Usage:${normal} service teamspeak"$([ $license ] && echo "-${servername}")" start|stop|restart|status|monitor|backup\n"
 fi
