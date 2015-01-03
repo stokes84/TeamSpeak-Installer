@@ -369,11 +369,20 @@ else
 	update-rc.d teamspeak$([ $license ] && echo "-${servername}") defaults
 fi
 
-printf "\n${bold}Starting TeamSpeak 3 for the first time${normal}\n"
-# Start the server for the first time and display the loginname, password, and token
-service teamspeak$([ $license ] && echo "-${servername}") start
-# Wait 3 seconds and display some useful info
-sleep 3
-printf "\nInstall Complete"
-printf "\nTeamSpeak 3 is running @ ${bold}$serverip:$ts3voiceport${normal}"
-printf "\n${bold}Usage:${normal} service teamspeak"$([ $license ] && echo "-${servername}")" start|stop|restart|status|monitor\n"
+read -p $'\x0aDo you want to start your TeamSpeak server now? (y/n) ' -n 1 -r
+
+if [[ $REPLY =~ ^[Yy]$ ]]
+then
+	printf "\n${bold}Starting TeamSpeak 3 for the first time${normal}\n"
+	# Start the server for the first time and display the loginname, password, and token
+	service teamspeak$([ $license ] && echo "-${servername}") start
+	# Wait 3 seconds and display some useful info
+	sleep 3
+	printf "\nInstall Complete"
+	printf "\nTeamSpeak 3 is running @ ${bold}$serverip:$ts3voiceport${normal}"
+	printf "\n${bold}Usage:${normal} service teamspeak"$([ $license ] && echo "-${servername}")" start|stop|restart|status|monitor|backup\n"
+else
+	printf "\nInstall Complete"
+	printf "\nTeamSpeak 3 available @ ${bold}$serverip:$ts3voiceport${normal}"
+	printf "\n${bold}Usage:${normal} service teamspeak"$([ $license ] && echo "-${servername}")" start|stop|restart|status|monitor|backup\n"
+fi
