@@ -53,9 +53,6 @@ read -p $'\x0aDo you have a TeamSpeak 3 license and wish to install multiple ins
 if [[ $REPLY =~ ^[Yy]$ ]]
 then
 	license=1
-	printf "\n${bold}Paste your license file here.${normal}\n"
-	read -e -p "TeamSpeak 3 Server License Company Name: " -i "" licensename
-	read -e -p "TeamSpeak 3 Server License Key: " -i "" licensefile
 	printf "\nProceeding with multi instance install process...\n"
 fi
 
@@ -195,14 +192,15 @@ query_skipbruteforcecheck=0" >> ${serverdir}/${chklicense}/server.ini
 # We'll make sure a whitelist file is ready
 touch ${serverdir}/${chklicense}/query_ip_whitelist.txt
 
-# Generate the license file
-touch ${serverdir}/${servername}/licensekey.dat
-cat <<EOF > ${serverdir}/${servername}/licensekey.dat
-Company name : ${licensename}
-
-==key==
-${licensefile}
-EOF
+# Prompt the user to upload the licensekey and don't let them continue until it's there
+while read -n 1 -p "Upload your licensekey.dat to ${serverdir}/${chklicense} and press any key to continue..."; do
+	if [ -f ${serverdir}/${chklicense}/licenskey.dat ]; then
+		printf "${bold}\n${serverdir}/${chklicense}/licenskey.dat detected\n${normal}"
+		break
+	else 
+		printf "${bold}\n${serverdir}/${chklicense}/licenskey.dat not detected\n${normal}"
+	fi
+done
 
 # Let's make a directory for backups
 mkdir ${serverdir}/${chklicense}/backups
