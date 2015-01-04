@@ -86,51 +86,52 @@ fi
 if id -u teamspeak >/dev/null 2>&1; then
 
 	printf "\n${bold}TeamSpeak 3 service account(teamspeak) already exists${normal}\n"
-	
-	# If you don't have a license and we see an existing install you gotta go remove that first
-	if [ -z "$has_license" ]; then 
-		if ls -d /home/teamspeak/*/ 1> /dev/null 2>&1; then
-			printf "\n${bold}Existing TeamSpeak3 install(s) detected.\n"
-			printf "\nFurther installations will not function without a license.\n"
-			printf "\nPlease remove the following installations then restart the installer: ${normal}\n"
-			ls -d1 /home/teamspeak/*/ | xargs -n1 basename
-			exit 0
-		fi
-	fi
-        
-	# Go to the TeamSpeak directory
-    	cd ${installs_dir}
-    
-	# If you have a license we'll prompt for a custom server name
-	if [ -n "$has_license" ]; then 
-		# Set TeamSpeak server name
-		printf "\n${bold}${info}Note:${normal} Alphanumeric only, everything else will be trimmed.\n"
-		read -e -p "Teamspeak 3 Server Name: " -i "" inputlicensed_server_name
-	
-		# Only alphanumeric names with dashes, we'll make sure of that
-		licensed_server_name="`echo -n "${inputlicensed_server_name}" | tr -cd '[:alnum:] [:space:]' | tr '[:space:]' '-'  | tr '[:upper:]' '[:lower:]'`"
-	fi
 else
 	# Create TS3 user account
 	printf "\n${bold}Creating TeamSpeak 3 service account (teamspeak)${normal}\n"
 	useradd -d ${installs_dir} -m teamspeak
-
-	# Go to the Teamspeak directory
-	cd ${installs_dir}
+fi
 	
-	# If you have a license we'll prompt for a custom server name
-	if [ -n "$has_license" ]; then
-		# Set TeamSpeak server name
-		printf "\n${bold}${info}Note:${normal} Alphanumeric only, everything else will be trimmed.\n"
-		read -e -p "TeamSpeak 3 Server Name: " -i "" inputlicensed_server_name
-	
-		# Only alphanumeric names, we'll make sure of that
-		licensed_server_name="`echo -n "${inputlicensed_server_name}" | tr -cd '[:alnum:] [:space:]' | tr '[:space:]' '-'  | tr '[:upper:]' '[:lower:]'`"
+# If you don't have a license and we see an existing install you gotta go remove that first
+if [ -z "$has_license" ]; then 
+	if ls -d /home/teamspeak/*/ 1> /dev/null 2>&1; then
+		printf "\n${bold}Existing TeamSpeak3 install(s) detected.\n"
+		printf "\nFurther installations will not function without a license.\n"
+		printf "\nPlease remove the following installations then restart the installer: ${normal}\n"
+		ls -d1 /home/teamspeak/*/ | xargs -n1 basename
+		exit 0
 	fi
 fi
+        
+# Go to the TeamSpeak directory
+cd ${installs_dir}
+    
+# If you have a license we'll prompt for a custom server name
+if [ -n "$has_license" ]; then 
+	# Set TeamSpeak server name
+	printf "\n${bold}${info}Note:${normal} Alphanumeric only, everything else will be trimmed.\n"
+	while read -e -p "Teamspeak 3 Server Name: " -i "" inputlicensed_server_name; do
 
-# Set server_dir now that we have a license status and server name
-server_dir=$([ $has_license ] && echo "${licensed_server_name}" || echo "teamspeak")
+		# Only alphanumeric names with dashes, we'll make sure of that
+		licensed_server_name="`echo -n "${inputlicensed_server_name}" | tr -cd '[:alnum:] [:space:]' | tr '[:space:]' '-'  | tr '[:upper:]' '[:lower:]'`"
+
+		# Make sure that server name doesn't already exist
+		if [ -d "$licensed_server_name" ]; then
+			printf "\n${bold}That server name already exists, try again.${normal}\n"
+			
+		# Make sure you didn't enter a blank server name
+		elif [ -z "$licensed_server_name" ]; then
+			printf "\n${bold}Server names cannot be blank, try again.${normal}\n"
+			
+		# Good name, let's move on
+		else
+			# Set server_dir now that we have a license status and server name
+			printf "\n${bold}Creating TeamSpeak 3 server ${licensed_server_name}.${normal}\n"
+			server_dir=$([ $has_license ] && echo "${licensed_server_name}" || echo "teamspeak")
+			break
+		fi
+	done
+fi
 
 # Download, unpack, and install the TeamSpeak application
 if [[ ${architecture} == *x86_64* ]]; then
