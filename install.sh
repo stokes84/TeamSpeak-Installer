@@ -1,6 +1,6 @@
 #!/bin/bash
-# Last Updated - 1/1/15
-# Chris Stokes - https://github.com/stokes84/Teamspeak-Installer
+# Last Updated - 1/3/15
+# Chris Stokes - https://github.com/stokes84/TeamSpeak-Installer
 #
 # Install Latest
 # wget --no-check-certificate https://raw.githubusercontent.com/stokes84/Teamspeak-Installer/master/install.sh; bash install.sh; rm -f install.sh
@@ -32,6 +32,44 @@ fi
 serverdir='/home/teamspeak'
 bit=$(uname -a)
 serverip=$(wget -qO- http://ipecho.net/plain ; echo)
+
+# Configuration variables
+servername=
+license=
+chklicense=
+machineid=
+voiceip=
+fileip=
+queryip=
+voiceport=
+fileport=
+queryport=
+
+
+# Function to display download progress bar @ wget and hide everything else
+progressfilt ()
+{
+    local flag=false c count cr=$'\r' nl=$'\n'
+    while IFS='' read -d '' -rn 1 c
+    do
+        if $flag
+        then
+            printf '%c' "$c"
+        else
+            if [[ $c != $cr && $c != $nl ]]
+            then
+                count=0
+            else
+                ((count++))
+                if ((count > 1))
+                then
+                    flag=true
+                fi
+            fi
+        fi
+    done
+}
+
 # Backup Public IP Service
 # serverip=$(wget -qO- checkip.dyndns.org|sed -e 's/.*Current IP Address: //' -e 's/<.*$//')
 
@@ -40,15 +78,19 @@ unset license
 
 # Install dependencies, currently only lsof for port checking
 if [ -f /etc/redhat-release ]; then
-	printf "\n${bold}Installing dependencies...${normal}\n"
-	yum -y -q install lsof
+	if ! yum list installed "lsof" >/dev/null 2>&1; then
+		printf "\n${bold}Installing dependencies...${normal}\n"
+		yum -y -q install lsof
+  	fi
 else
-	printf "${bold}Installing dependencies...${normal}"
-	apt-get -y -q install lsof
+	if ! apt-get list installed "lsof" >/dev/null 2>&1; then
+		printf "\n${bold}Installing dependencies...${normal}\n"
+		apt-get -y -q install lsof
+  	fi
 fi
 
 # Let's check to see if you have a license to install multiple instances
-read -p $'\x0aDo you have a TeamSpeak 3 license and wish to install multiple instances? (y/n) ' -n 1 -r
+read -p $'\x0aDo you have a license and wish to install multiple instances? (y/n) ' -n 1 -r
 
 if [[ $REPLY =~ ^[Yy]$ ]]
 then
@@ -65,7 +107,7 @@ if id -u teamspeak >/dev/null 2>&1; then
 	if [ -z "$license" ]; then 
 		if ls -d /home/teamspeak/*/ 1> /dev/null 2>&1; then
 			printf "\n${bold}Existing TeamSpeak3 install(s) detected.\n"
-			printf "\nFurther installations will not function without a license\n"
+			printf "\nFurther installations will not function without a license.\n"
 			printf "\nPlease remove the following installations then restart the installer: ${normal}\n"
 			ls -d1 /home/teamspeak/*/ | xargs -n1 basename
 			exit 0
@@ -106,35 +148,11 @@ fi
 # Set chklicense now that we have a license status and server name
 chklicense=$([ $license ] && echo "${servername}" || echo "teamspeak")
 
-# Function to display download progress bar and hide everything else
-progressfilt ()
-{
-    local flag=false c count cr=$'\r' nl=$'\n'
-    while IFS='' read -d '' -rn 1 c
-    do
-        if $flag
-        then
-            printf '%c' "$c"
-        else
-            if [[ $c != $cr && $c != $nl ]]
-            then
-                count=0
-            else
-                ((count++))
-                if ((count > 1))
-                then
-                    flag=true
-                fi
-            fi
-        fi
-    done
-}
-
 # Download, unpack, and install the TeamSpeak application
 if [[ ${bit} == *x86_64* ]]; then
 	# You're running 64 bit
 	printf "\n${bold}Downloading latest 64bit version of TeamSpeak 3${normal}\n"
-	wget --progress=bar:force http://dl.4players.de/ts/releases/3.0.11.2/teamspeak3-server_linux-amd64-3.0.11.2.tar.gz -O teamspeak3-64.tar.gz 2>&1 | progressfilt
+	wget --tries=5 --progress=bar:force http://dl.4players.de/ts/releases/3.0.11.2/teamspeak3-server_linux-amd64-3.0.11.2.tar.gz -O teamspeak3-64.tar.gz 2>&1 | progressfilt
 	tar xzf teamspeak3-64.tar.gz
 	rm -f teamspeak3-64.tar.gz
 	if [ -n "$license" ]; then
@@ -150,7 +168,7 @@ if [[ ${bit} == *x86_64* ]]; then
 else 
 	# You're running 32 bit
 	printf "\n${bold}Downloading latest 32bit version of TeamSpeak 3${normal}\n"
-	wget --progress=bar:force http://dl.4players.de/ts/releases/3.0.11.2/teamspeak3-server_linux-x86-3.0.11.2.tar.gz -O teamspeak3-32.tar.gz 2>&1 | progressfilt
+	wget --tries=5 --progress=bar:force http://dl.4players.de/ts/releases/3.0.11.2/teamspeak3-server_linux-x86-3.0.11.2.tar.gz -O teamspeak3-32.tar.gz 2>&1 | progressfilt
 	tar xzf teamspeak3-32.tar.gz
 	rm -f teamspeak3-32.tar.
 	if [ -n "$license" ]; then
@@ -192,16 +210,6 @@ query_skipbruteforcecheck=0" >> ${serverdir}/${chklicense}/server.ini
 # We'll make sure a whitelist file is ready
 touch ${serverdir}/${chklicense}/query_ip_whitelist.txt
 
-# Prompt the user to upload the licensekey and don't let them continue until it's there
-while read -n 1 -p "Upload your licensekey.dat to ${serverdir}/${chklicense} and press any key to continue..."; do
-	if [ -f ${serverdir}/${chklicense}/licensekey.dat ]; then
-		printf "${bold}\n${serverdir}/${chklicense}/licensekey.dat detected\n\n${normal}"
-		break
-	else 
-		printf "${bold}\n${serverdir}/${chklicense}/licensekey.dat not detected\n\n${normal}"
-	fi
-done
-
 # Let's make a directory for backups
 mkdir ${serverdir}/${chklicense}/backups
 
@@ -234,34 +242,34 @@ sed -i 's|COMMANDLINE_PARAMETERS="${2}"|COMMANDLINE_PARAMETERS="${2} inifile=ser
 
 # Set Teamspeak 3 voice port & make sure it's not being used
 # UDP port open for clients to connect to
-while read -e -p "TeamSpeak 3 Server Voice Port: " -i "9987" ts3voiceport; do
-	if [[ -z $(lsof -i :${ts3voiceport}) ]]; then
-		sed -i -e "s|default_voice_port=9987|default_voice_port=$ts3voiceport|g" ${serverdir}/${chklicense}/server.ini
+while read -e -p "TeamSpeak 3 Server Voice Port: " -i "9987" voiceport; do
+	if [[ -z $(lsof -i :${voiceport}) ]]; then
+		sed -i -e "s|default_voice_port=9987|default_voice_port=$voiceport|g" ${serverdir}/${chklicense}/server.ini
 		break
 	else 
-		printf "${bold}Port ${ts3voiceport} in use, try another port\n${normal}"
+		printf "${bold}Port ${voiceport} in use, try another port\n${normal}"
 	fi
 done
 
 # Set Teamspeak 3 server file transfer port & make sure it's not being used
 # TCP Port opened for file transfers
-while read -e -p "TeamSpeak 3 Server File Transfer Port: " -i "30033" ts3fileport; do
-	if [[ -z $(lsof -i :${ts3fileport}) ]]; then
-		sed -i -e "s|filetransfer_port=30033|filetransfer_port=$ts3fileport|g" ${serverdir}/${chklicense}/server.ini
+while read -e -p "TeamSpeak 3 Server File Transfer Port: " -i "30033" fileport; do
+	if [[ -z $(lsof -i :${fileport}) ]]; then
+		sed -i -e "s|filetransfer_port=30033|filetransfer_port=$fileport|g" ${serverdir}/${chklicense}/server.ini
 		break
 	else 
-		printf "${bold}Port ${ts3fileport} use, try another port\n${normal}"
+		printf "${bold}Port ${fileport} use, try another port\n${normal}"
 	fi
 done
 
 # Set Teamspeak 3 ServerQuery port & make sure it's not being used
 # TCP Port opened for ServerQuery connections
-while read -e -p "TeamSpeak 3 ServerQuery Port: " -i "10011" ts3queryport; do
-	if [[ -z $(lsof -i :${ts3queryport}) ]]; then
-		sed -i -e "s|query_port=10011|query_port=$ts3queryport|g" ${serverdir}/${chklicense}/server.ini
+while read -e -p "TeamSpeak 3 ServerQuery Port: " -i "10011" queryport; do
+	if [[ -z $(lsof -i :${queryport}) ]]; then
+		sed -i -e "s|query_port=10011|query_port=$queryport|g" ${serverdir}/${chklicense}/server.ini
 		break
 	else 
-		printf "${bold}Port ${ts3queryport} in use, try another port\n${normal}"
+		printf "${bold}Port ${queryport} in use, try another port\n${normal}"
 	fi
 done
 
@@ -379,10 +387,10 @@ then
 	# Wait 3 seconds and display some useful info
 	sleep 3
 	printf "\n\Install Complete"
-	printf "\nTeamSpeak 3 is running @ ${bold}$serverip:$ts3voiceport${normal}"
+	printf "\nTeamSpeak 3 is running @ ${bold}$serverip:$voiceport${normal}"
 	printf "\n${bold}Usage:${normal} service teamspeak"$([ $license ] && echo "-${servername}")" start|stop|restart|status|monitor|backup\n"
 else
 	printf "\n\nInstall Complete"
-	printf "\nTeamSpeak 3 available @ ${bold}$serverip:$ts3voiceport${normal}"
+	printf "\nTeamSpeak 3 available @ ${bold}$serverip:$voiceport${normal}"
 	printf "\n${bold}Usage:${normal} service teamspeak"$([ $license ] && echo "-${servername}")" start|stop|restart|status|monitor|backup\n"
 fi
