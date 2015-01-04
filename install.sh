@@ -246,43 +246,55 @@ sed -i 's|COMMANDLINE_PARAMETERS="${2}"|COMMANDLINE_PARAMETERS="${2} inifile=ser
 # Set Teamspeak 3 voice port & make sure it's not being used
 # UDP port open for clients to connect to
 while read -e -p "TeamSpeak 3 Server Voice Port: " -i "9987" voice_port; do
-	s=0
-	for each_install in "${installs_dir}/"*; do
-		while grep -cq default_voice_port=${voice_port} ${each_install}/server.ini; do
-			let "s++"
-			break
+	if [[ $voice_port =~ ^([0-9]{1,4}|[1-5][0-9]{4}|6[0-4][0-9]{3}|65[0-4][0-9]{2}|655[0-2][0-9]|6553[0-5])$ ]]; then
+		s=0
+		for each_install in "${installs_dir}/"*; do
+			while grep -cq default_voice_port=${voice_port} ${each_install}/server.ini; do
+				let "s++"
+				break
+			done
 		done
-	done
-	[ ${s} != 0 ] && printf "${bold}Port ${voice_port} in use, try another port\n${normal}"
-	[ ${s} == 0 ] && sed -i -e "s|default_voice_port=9987|default_voice_port=$voice_port|g" ${installs_dir}/${server_dir}/server.ini && break
+		[ ${s} != 0 ] && printf "${bold}Port ${voice_port} in use, try another port\n${normal}"
+		[ ${s} == 0 ] && sed -i -e "s|default_voice_port=9987|default_voice_port=$voice_port|g" ${installs_dir}/${server_dir}/server.ini && break
+	else
+		printf "\n${bold}Not a valid port number, try again.${normal}\n"
+	fi
 done
 
 # Set Teamspeak 3 server file transfer port & make sure it's not being used
 # TCP Port opened for file transfers
 while read -e -p "TeamSpeak 3 Server File Transfer Port: " -i "30033" file_port; do
-	s=0
-	for each_install in "${installs_dir}/"*; do
-		while grep -cq filetransfer_port=${file_port} ${each_install}/server.ini; do
-			let "s++"
-			break
+	if [[ $file_port =~ ^([0-9]{1,4}|[1-5][0-9]{4}|6[0-4][0-9]{3}|65[0-4][0-9]{2}|655[0-2][0-9]|6553[0-5])$ ]]; then
+		s=0
+		for each_install in "${installs_dir}/"*; do
+			while grep -cq filetransfer_port=${file_port} ${each_install}/server.ini; do
+				let "s++"
+				break
+			done
 		done
-	done
-	[ ${s} != 0 ] && printf "${bold}Port ${file_port} in use, try another port\n${normal}"
-	[ ${s} == 0 ] && sed -i -e "s|filetransfer_port=30033|filetransfer_port=$file_port|g" ${installs_dir}/${server_dir}/server.ini && break
+		[ ${s} != 0 ] && printf "${bold}Port ${file_port} in use, try another port\n${normal}"
+		[ ${s} == 0 ] && sed -i -e "s|filetransfer_port=30033|filetransfer_port=$file_port|g" ${installs_dir}/${server_dir}/server.ini && break
+	else
+		printf "\n${bold}Not a valid port number, try again.${normal}\n"
+	fi
 done
 
 # Set Teamspeak 3 ServerQuery port & make sure it's not being used
 # TCP Port opened for ServerQuery connections
 while read -e -p "TeamSpeak 3 ServerQuery Port: " -i "10011" query_port; do
-	s=0
-	for each_install in "${installs_dir}/"*; do
-		while grep -cq query_port=${query_port} ${each_install}/server.ini; do
-			let "s++"
-			break
+	if [[ $query_port =~ ^([0-9]{1,4}|[1-5][0-9]{4}|6[0-4][0-9]{3}|65[0-4][0-9]{2}|655[0-2][0-9]|6553[0-5])$ ]]; then
+		s=0
+		for each_install in "${installs_dir}/"*; do
+			while grep -cq query_port=${query_port} ${each_install}/server.ini; do
+				let "s++"
+				break
+			done
 		done
-	done
-	[ ${s} != 0 ] && printf "${bold}Port ${query_port} in use, try another port\n${normal}"
-	[ ${s} == 0 ] && sed -i -e "s|query_port=10011|query_port=$query_port|g" ${installs_dir}/${server_dir}/server.ini && break
+		[ ${s} != 0 ] && printf "${bold}Port ${query_port} in use, try another port\n${normal}"
+		[ ${s} == 0 ] && sed -i -e "s|query_port=10011|query_port=$query_port|g" ${installs_dir}/${server_dir}/server.ini && break
+	else
+		printf "\n${bold}Not a valid port number, try again.${normal}\n"
+	fi
 done
 
 # Setup the TeamSpeak service file
