@@ -209,18 +209,36 @@ printf "\n${info}${bold}Note:${normal} If installing on a machine with a dynamic
 
 # Insert IP into the voice_ip field
 # IP on which the server instance will listen for incoming voice connections
-read -e -p "TeamSpeak 3 Voice IP: " -i "$server_wan_ip" voice_ip
-sed -i -e "s|voice_ip=0.0.0.0|voice_ip=$voice_ip|g" ${installs_dir}/${server_dir}/server.ini
+while read -e -p "TeamSpeak 3 Voice IP: " -i "$server_wan_ip" voice_ip; do
+	if [[ $voice_ip =~ ^[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}$ ]]; then
+		sed -i -e "s|voice_ip=0.0.0.0|voice_ip=$voice_ip|g" ${installs_dir}/${server_dir}/server.ini
+		break
+	else
+		printf "\n${bold}Not a valid IP address, try again.${normal}\n"
+	fi
+done
 
 # Insert IP into the filetransfer_ip field
 # IP on which the file transfers are bound to
-read -e -p "TeamSpeak 3 File Transfer IP: " -i "$server_wan_ip" file_ip
-sed -i -e "s|filetransfer_ip=0.0.0.0|filetransfer_ip=$file_ip|g" ${installs_dir}/${server_dir}/server.ini
+while read -e -p "TeamSpeak 3 File Transfer IP: " -i "$server_wan_ip" file_ip; do
+	if [[ $file_ip =~ ^[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}$ ]]; then
+		sed -i -e "s|filetransfer_ip=0.0.0.0|filetransfer_ip=$file_ip|g" ${installs_dir}/${server_dir}/server.ini
+		break
+	else
+		printf "\n${bold}Not a valid IP address, try again.${normal}\n"
+	fi
+done
 
 # Insert IP into the query_ip field
 # IP bound for incoming ServerQuery connections
-read -e -p "TeamSpeak 3 Query IP: " -i "$server_wan_ip" query_ip
-sed -i -e "s|query_ip=0.0.0.0|query_ip=$query_ip|g" ${installs_dir}/${server_dir}/server.ini
+while read -e -p "TeamSpeak 3 ServerQuery IP: " -i "$server_wan_ip" query_ip; do
+	if [[ $query_ip =~ ^[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}$ ]]; then
+		sed -i -e "s|query_ip=0.0.0.0|query_ip=$query_ip|g" ${installs_dir}/${server_dir}/server.ini
+		break
+	else
+		printf "\n${bold}Not a valid IP address, try again.${normal}\n"
+	fi
+done
 
 # Edits the startup script to load the ini file
 sed -i 's|COMMANDLINE_PARAMETERS="${2}"|COMMANDLINE_PARAMETERS="${2} inifile=server.ini"|g' ${installs_dir}/${server_dir}/ts3server_startscript.sh
@@ -229,7 +247,7 @@ sed -i 's|COMMANDLINE_PARAMETERS="${2}"|COMMANDLINE_PARAMETERS="${2} inifile=ser
 # UDP port open for clients to connect to
 while read -e -p "TeamSpeak 3 Server Voice Port: " -i "9987" voice_port; do
 	s=0
-    for each_install in "${installs_dir}/"*; do
+	for each_install in "${installs_dir}/"*; do
 		while grep -cq default_voice_port=${voice_port} ${each_install}/server.ini; do
 			let "s++"
 			break
@@ -243,7 +261,7 @@ done
 # TCP Port opened for file transfers
 while read -e -p "TeamSpeak 3 Server File Transfer Port: " -i "30033" file_port; do
 	s=0
-    for each_install in "${installs_dir}/"*; do
+	for each_install in "${installs_dir}/"*; do
 		while grep -cq filetransfer_port=${file_port} ${each_install}/server.ini; do
 			let "s++"
 			break
@@ -257,7 +275,7 @@ done
 # TCP Port opened for ServerQuery connections
 while read -e -p "TeamSpeak 3 ServerQuery Port: " -i "10011" query_port; do
 	s=0
-    for each_install in "${installs_dir}/"*; do
+	for each_install in "${installs_dir}/"*; do
 		while grep -cq query_port=${query_port} ${each_install}/server.ini; do
 			let "s++"
 			break
