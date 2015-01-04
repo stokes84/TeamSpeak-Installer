@@ -33,6 +33,9 @@ installs_dir='/home/teamspeak'
 architecture=$(uname -a)
 server_wan_ip=$(wget -qO- http://ipecho.net/plain ; echo)
 
+# Backup Public IP Service
+# server_wan_ip=$(wget -qO- checkip.dyndns.org|sed -e 's/.*Current IP Address: //' -e 's/<.*$//')
+
 # Configuration variables
 has_license=
 licensed_server_name=
@@ -69,25 +72,6 @@ wget_filter ()
         fi
     done
 }
-
-# Backup Public IP Service
-# server_wan_ip=$(wget -qO- checkip.dyndns.org|sed -e 's/.*Current IP Address: //' -e 's/<.*$//')
-
-# Clear it in case of previous mistake
-unset has_license
-
-# Install dependencies, currently only lsof for port checking
-if [ -f /etc/redhat-release ]; then
-	if ! yum list installed "lsof" >/dev/null 2>&1; then
-		printf "\n${bold}Installing dependencies...${normal}\n"
-		yum -y -q install lsof
-  	fi
-else
-	if ! apt-get list installed "lsof" >/dev/null 2>&1; then
-		printf "\n${bold}Installing dependencies...${normal}\n"
-		apt-get -y -q install lsof
-  	fi
-fi
 
 # Let's check to see if you have a license to install multiple instances
 read -p $'\x0aDo you have a license and wish to install multiple instances? (y/n) ' -n 1 -r
@@ -243,34 +227,43 @@ sed -i 's|COMMANDLINE_PARAMETERS="${2}"|COMMANDLINE_PARAMETERS="${2} inifile=ser
 # Set Teamspeak 3 voice port & make sure it's not being used
 # UDP port open for clients to connect to
 while read -e -p "TeamSpeak 3 Server Voice Port: " -i "9987" voice_port; do
-	if [[ -z $(lsof -i :${voice_port}) ]]; then
-		sed -i -e "s|default_voice_port=9987|default_voice_port=$voice_port|g" ${installs_dir}/${server_dir}/server.ini
-		break
-	else 
-		printf "${bold}Port ${voice_port} in use, try another port\n${normal}"
-	fi
+	s=0
+    for each_install in "${installs_dir}/"*; do
+		while grep -cq default_voice_port=${voice_port} ${each_install}/server.ini; do
+			let "s++"
+			break
+		done
+	done
+	[ ${s} != 0 ] && printf "${bold}Port ${voice_port} in use, try another port\n${normal}"
+	[ ${s} == 0 ] && sed -i -e "s|default_voice_port=9987|default_voice_port=$voice_port|g" ${installs_dir}/${server_dir}/server.ini && break
 done
 
 # Set Teamspeak 3 server file transfer port & make sure it's not being used
 # TCP Port opened for file transfers
 while read -e -p "TeamSpeak 3 Server File Transfer Port: " -i "30033" file_port; do
-	if [[ -z $(lsof -i :${file_port}) ]]; then
-		sed -i -e "s|filetransfer_port=30033|filetransfer_port=$file_port|g" ${installs_dir}/${server_dir}/server.ini
-		break
-	else 
-		printf "${bold}Port ${file_port} use, try another port\n${normal}"
-	fi
+	s=0
+    for each_install in "${installs_dir}/"*; do
+		while grep -cq filetransfer_port=${file_port} ${each_install}/server.ini; do
+			let "s++"
+			break
+		done
+	done
+	[ ${s} != 0 ] && printf "${bold}Port ${file_port} in use, try another port\n${normal}"
+	[ ${s} == 0 ] && sed -i -e "s|filetransfer_port=30033|filetransfer_port=$file_port|g" ${installs_dir}/${server_dir}/server.ini && break
 done
 
 # Set Teamspeak 3 ServerQuery port & make sure it's not being used
 # TCP Port opened for ServerQuery connections
 while read -e -p "TeamSpeak 3 ServerQuery Port: " -i "10011" query_port; do
-	if [[ -z $(lsof -i :${query_port}) ]]; then
-		sed -i -e "s|query_port=10011|query_port=$query_port|g" ${installs_dir}/${server_dir}/server.ini
-		break
-	else 
-		printf "${bold}Port ${query_port} in use, try another port\n${normal}"
-	fi
+	s=0
+    for each_install in "${installs_dir}/"*; do
+		while grep -cq query_port=${query_port} ${each_install}/server.ini; do
+			let "s++"
+			break
+		done
+	done
+	[ ${s} != 0 ] && printf "${bold}Port ${query_port} in use, try another port\n${normal}"
+	[ ${s} == 0 ] && sed -i -e "s|query_port=10011|query_port=$query_port|g" ${installs_dir}/${server_dir}/server.ini && break
 done
 
 # Setup the TeamSpeak service file
