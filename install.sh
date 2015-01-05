@@ -24,7 +24,7 @@ normal=`tput sgr0`
 
 # Ensure this script is run as root
 if [ "$(id -u)" != "0" ]; then
-	echo "${bold}This script must be run as root${normal}" 1>&2
+	echo "${bold}This script must be run as root${normal}" &> /dev/null
 	exit 1
 fi
 
@@ -74,7 +74,8 @@ wget_filter ()
 }
 
 # Let's check to see if you have a license to install multiple instances
-read -p $'\x0aDo you have a license and wish to install multiple instances? (y/n) ' -n 1 -r
+read -p $'\x0aDo you have a license and wish to install multiple instances? (y/n)' -n 1 -r
+printf "\n"
 
 if [[ $REPLY =~ ^[Yy]$ ]]
 then
@@ -83,7 +84,7 @@ then
 fi
 
 # Check if user exists in case of previous install or multi instance install
-if id -u teamspeak >/dev/null 2>&1; then
+if id -u teamspeak &> /dev/null; then
 
 	printf "\n${bold}TeamSpeak 3 service account(teamspeak) already exists${normal}\n"
 else
@@ -94,7 +95,7 @@ fi
 	
 # If you don't have a license and we see an existing install you gotta go remove that first
 if [ -z "$has_license" ]; then 
-	if ls -d /home/teamspeak/*/ 1> /dev/null 2>&1; then
+	if ls -d /home/teamspeak/*/ &> /dev/null; then
 		printf "\n${bold}Existing TeamSpeak3 install(s) detected.\n"
 		printf "\nFurther installations will not function without a license.\n"
 		printf "\nPlease remove the following installations then restart the installer: ${normal}\n"
@@ -214,7 +215,7 @@ while read -e -p "TeamSpeak 3 Voice IP: " -i "$server_wan_ip" voice_ip; do
 		sed -i -e "s|voice_ip=0.0.0.0|voice_ip=$voice_ip|g" ${installs_dir}/${server_dir}/server.ini
 		break
 	else
-		printf "\n${bold}Not a valid IP address, try again.${normal}\n"
+		printf "\n${bold}Not a valid IP address, try again${normal}\n"
 	fi
 done
 
@@ -225,7 +226,7 @@ while read -e -p "TeamSpeak 3 File Transfer IP: " -i "$server_wan_ip" file_ip; d
 		sed -i -e "s|filetransfer_ip=0.0.0.0|filetransfer_ip=$file_ip|g" ${installs_dir}/${server_dir}/server.ini
 		break
 	else
-		printf "\n${bold}Not a valid IP address, try again.${normal}\n"
+		printf "\n${bold}Not a valid IP address, try again${normal}\n"
 	fi
 done
 
@@ -236,7 +237,7 @@ while read -e -p "TeamSpeak 3 ServerQuery IP: " -i "$server_wan_ip" query_ip; do
 		sed -i -e "s|query_ip=0.0.0.0|query_ip=$query_ip|g" ${installs_dir}/${server_dir}/server.ini
 		break
 	else
-		printf "\n${bold}Not a valid IP address, try again.${normal}\n"
+		printf "\n${bold}Not a valid IP address, try again${normal}\n"
 	fi
 done
 
@@ -254,10 +255,10 @@ while read -e -p "TeamSpeak 3 Server Voice Port: " -i "9987" voice_port; do
 				break
 			done
 		done
-		[ ${s} != 0 ] && printf "${bold}Port ${voice_port} in use, try another port\n${normal}"
+		[ ${s} != 0 ] && printf "\n${bold}Port ${voice_port} in use, try another port${normal}\n"
 		[ ${s} == 0 ] && sed -i -e "s|default_voice_port=9987|default_voice_port=$voice_port|g" ${installs_dir}/${server_dir}/server.ini && break
 	else
-		printf "\n${bold}Not a valid port number, try again.${normal}\n"
+		printf "\n${bold}Not a valid port number, try again${normal}\n"
 	fi
 done
 
@@ -272,10 +273,10 @@ while read -e -p "TeamSpeak 3 Server File Transfer Port: " -i "30033" file_port;
 				break
 			done
 		done
-		[ ${s} != 0 ] && printf "${bold}Port ${file_port} in use, try another port\n${normal}"
+		[ ${s} != 0 ] && printf "\n${bold}Port ${file_port} in use, try another port${normal}\n"
 		[ ${s} == 0 ] && sed -i -e "s|filetransfer_port=30033|filetransfer_port=$file_port|g" ${installs_dir}/${server_dir}/server.ini && break
 	else
-		printf "\n${bold}Not a valid port number, try again.${normal}\n"
+		printf "\n${bold}Not a valid port number, try again${normal}\n"
 	fi
 done
 
@@ -290,10 +291,10 @@ while read -e -p "TeamSpeak 3 ServerQuery Port: " -i "10011" query_port; do
 				break
 			done
 		done
-		[ ${s} != 0 ] && printf "${bold}Port ${query_port} in use, try another port\n${normal}"
+		[ ${s} != 0 ] && printf "\n${bold}Port ${query_port} in use, try another port${normal}\n"
 		[ ${s} == 0 ] && sed -i -e "s|query_port=10011|query_port=$query_port|g" ${installs_dir}/${server_dir}/server.ini && break
 	else
-		printf "\n${bold}Not a valid port number, try again.${normal}\n"
+		printf "\n${bold}Not a valid port number, try again${normal}\n"
 	fi
 done
 
@@ -317,7 +318,7 @@ case "\$1" in
 	'status')
 		su teamspeak -c "${installs_dir}/${server_dir}/ts3server_startscript.sh status";;
 	'monitor')
-		watch -n 5 "service teamspeak$([ $has_license ] && echo "-${licensed_server_name}") start" &>/dev/null &;;
+		watch -n 5 "service teamspeak$([ $has_license ] && echo "-${licensed_server_name}") start" &> /dev/null;
 	'backup')
 		name=backup-\$(date '+%Y-%m-%d-%H%M%S').tar
 		printf "\n"
@@ -360,7 +361,7 @@ case "\$1" in
 	'status')
 		su teamspeak -c "${installs_dir}/${server_dir}/ts3server_startscript.sh status";;
 	'monitor')
-		watch -n 5 "service teamspeak$([ $has_license ] && echo "-${licensed_server_name}") start" &>/dev/null &;;
+		watch -n 5 "service teamspeak$([ $has_license ] && echo "-${licensed_server_name}") start" &> /dev/null;
 	'backup')
 		name=backup-\$(date '+%Y-%m-%d-%H%M%S').tar
 		printf "\n"
@@ -411,10 +412,10 @@ then
 	# Wait 3 seconds and display some useful info
 	sleep 3
 	printf "\n\Install Complete"
-	printf "\nTeamSpeak 3 is running @ ${bold}$server_wan_ip:$voice_port${normal}"
+	printf "\nTeamSpeak 3 running @ ${bold}$voice_ip:$voice_port${normal}"
 	printf "\n${bold}Usage:${normal} service teamspeak"$([ $has_license ] && echo "-${licensed_server_name}")" start|stop|restart|status|monitor|backup\n"
 else
 	printf "\n\nInstall Complete"
-	printf "\nTeamSpeak 3 available @ ${bold}$server_wan_ip:$voice_port${normal}"
+	printf "\nTeamSpeak 3 configured @ ${bold}$voice_ip:$voice_port${normal}"
 	printf "\n${bold}Usage:${normal} service teamspeak"$([ $has_license ] && echo "-${licensed_server_name}")" start|stop|restart|status|monitor|backup\n"
 fi
