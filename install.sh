@@ -30,7 +30,7 @@ fi
 
 # Install variables
 installs_dir='/home/teamspeak'
-architecture=$(uname -a)
+architecture=$(uname -m)
 server_wan_ip=$(wget -qO- http://ipecho.net/plain ; echo)
 
 # Backup Public IP Service
