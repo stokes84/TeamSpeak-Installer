@@ -141,7 +141,7 @@ server_name=$([ $has_license ] && echo "teamspeak-${licensed_server_name}" || ec
 monitor_name=$([ $has_license ] && echo "monitor_${licensed_server_name}" || echo "monitor_teamspeak")
 
 # Download, unpack, and install the TeamSpeak application
-if [[ ${architecture} == *x86_64* ]]; then
+if [[ ${architecture} == "x86_64" ]]; then
 	# You're running 64-bit
 	printf "\n${bold}Downloading latest 64-bit version of TeamSpeak 3${normal}\n"
 	wget --tries=5 --progress=bar:force http://dl.4players.de/ts/releases/3.0.11.2/teamspeak3-server_linux-amd64-3.0.11.2.tar.gz -O teamspeak3-64.tar.gz 2>&1 | wget_filter
