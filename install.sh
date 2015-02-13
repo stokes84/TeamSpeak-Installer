@@ -31,10 +31,10 @@ fi
 # Install variables
 installs_dir='/home/teamspeak'
 architecture=$(uname -m)
-server_wan_ip=$(wget -qO- http://ipecho.net/plain ; echo)
+server_wan_ip=$(wget -qO- checkip.dyndns.org|sed -e 's/.*Current IP Address: //' -e 's/<.*$//')
 
 # Backup Public IP Service
-# server_wan_ip=$(wget -qO- checkip.dyndns.org|sed -e 's/.*Current IP Address: //' -e 's/<.*$//')
+# server_wan_ip=$(wget -qO- http://ipecho.net/plain ; echo)
 
 # Configuration variables
 has_license=
