@@ -338,10 +338,13 @@ case "\$1" in
 		done & echo \$! > ${installs_dir}/${server_dir}/${monitor_name}.pid
 	;;
 	'monitor-stop')
-		# Kill monitor process, hide the output, and remove the PID file
-		kill -9 \$(cat ${installs_dir}/${server_dir}/${monitor_name}.pid)
-		wait \$(cat ${installs_dir}/${server_dir}/${monitor_name}.pid) 2>/dev/null
-		rm -f ${installs_dir}/${server_dir}/${monitor_name}.pid
+		# Only stop the monitor if we know it's actually started first
+		if [ -f ${installs_dir}/${server_dir}/${monitor_name}.pid ]; then
+			# Kill monitor process, hide the output, and remove the PID file
+			kill -9 \$(cat ${installs_dir}/${server_dir}/${monitor_name}.pid)
+			wait \$(cat ${installs_dir}/${server_dir}/${monitor_name}.pid) 2>/dev/null
+			rm -f ${installs_dir}/${server_dir}/${monitor_name}.pid
+		fi
 	;;
 	'backup')
 		name=backup-\$(date '+%Y-%m-%d-%H%M%S').tar
@@ -399,10 +402,13 @@ case "\$1" in
 		done & echo \$! > ${installs_dir}/${server_dir}/${monitor_name}.pid
 	;;
 	'monitor-stop')
-		# Kill monitor process, hide the output, and remove the PID file
-		kill -9 \$(cat ${installs_dir}/${server_dir}/${monitor_name}.pid)
-		wait \$(cat ${installs_dir}/${server_dir}/${monitor_name}.pid) 2>/dev/null
-		rm -f ${installs_dir}/${server_dir}/${monitor_name}.pid
+		# Only stop the monitor if we know it's actually started first
+		if [ -f ${installs_dir}/${server_dir}/${monitor_name}.pid ]; then
+			# Kill monitor process, hide the output, and remove the PID file
+			kill -9 \$(cat ${installs_dir}/${server_dir}/${monitor_name}.pid)
+			wait \$(cat ${installs_dir}/${server_dir}/${monitor_name}.pid) 2>/dev/null
+			rm -f ${installs_dir}/${server_dir}/${monitor_name}.pid
+		fi
 	;;
 	'backup')
 		name=backup-\$(date '+%Y-%m-%d-%H%M%S').tar
