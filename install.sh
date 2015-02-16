@@ -394,7 +394,7 @@ case "\$1" in
 		fi
 		while true; do
 			# If server responds with "No server running" then restart it
-			if [[ \$(service ${server_name} status) == *"No server"* ]]; then
+			if service ${server_name} status | grep "No server"; then
 				su teamspeak -c "${installs_dir}/${server_dir}/ts3server_startscript.sh start" &> /dev/null
 			fi
 			sleep 5
