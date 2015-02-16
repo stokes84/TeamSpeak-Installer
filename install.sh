@@ -405,7 +405,6 @@ case "\$1" in
 		rm -f ${installs_dir}/${server_dir}/${monitor_name}.pid
 	;;
 	'backup')
-		su teamspeak -c "
 		name=backup-\$(date '+%Y-%m-%d-%H%M%S').tar
 		printf "\n"
 		service ${server_name} stop
