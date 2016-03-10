@@ -467,3 +467,4 @@ else
 	printf "\nTeamSpeak 3 configured @ ${bold}$voice_ip:$voice_port${normal}"
 	printf "\n${bold}Usage:${normal} service teamspeak"$([ $has_license ] && echo "-${licensed_server_name}")" start|stop|restart|status|monitor-start|monitor-stop|backup\n"
 fi
+
