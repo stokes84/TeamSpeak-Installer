@@ -148,11 +148,11 @@ if [[ ${architecture} == "x86_64" ]]; then
 	tar xjf teamspeak3-64.tar.bz2
 	rm -f teamspeak3-64.tar.bz2
 	if [ -n "$has_license" ]; then
-			# If installer was run previously but did not complete
-			if [ -d "${licensed_server_name}" ]; then
-					printf "${bold}Removing existing directory: ${normal}${licensed_server_name}\n\n"
-					rm -rf ${licensed_server_name}
-			fi
+		# If installer was run previously but did not complete
+		if [ -d "${licensed_server_name}" ]; then
+			printf "${bold}Removing existing directory: ${normal}${licensed_server_name}\n\n"
+			rm -rf ${licensed_server_name}
+		fi
 	fi
 	mv teamspeak3-server_linux_amd64 ${server_dir}
 	cd ${server_dir}
@@ -164,11 +164,11 @@ else
 	tar xjf teamspeak3-32.tar.bz2
 	rm -f teamspeak3-32.tar.bz2
 	if [ -n "$has_license" ]; then
-			# If installer was run previously but did not complete
-			if [ -d "${licensed_server_name}" ]; then
-					printf "${bold}Removing existing directory: ${normal}${licensed_server_name}\n\n"
-					rm -rf ${licensed_server_name}
-			fi
+		# If installer was run previously but did not complete
+		if [ -d "${licensed_server_name}" ]; then
+			printf "${bold}Removing existing directory: ${normal}${licensed_server_name}\n\n"
+			rm -rf ${licensed_server_name}
+		fi
 	fi
 	mv teamspeak3-server_linux_x86 ${server_dir}
 	cd ${server_dir}
