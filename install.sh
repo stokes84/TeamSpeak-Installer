@@ -144,9 +144,9 @@ monitor_name=$([ $has_license ] && echo "monitor_${licensed_server_name}" || ech
 if [[ ${architecture} == "x86_64" ]]; then
 	# You're running 64-bit
 	printf "\n${bold}Downloading latest 64-bit version of TeamSpeak 3${normal}\n"
-	wget --tries=5 --progress=bar:force http://dl.4players.de/ts/releases/3.0.11.2/teamspeak3-server_linux-amd64-3.0.11.2.tar.gz -O teamspeak3-64.tar.gz 2>&1 | wget_filter
-	tar xzf teamspeak3-64.tar.gz
-	rm -f teamspeak3-64.tar.gz
+	wget --tries=5 --progress=bar:force http://dl.4players.de/ts/releases/3.0.12.2/teamspeak3-server_linux_amd64-3.0.12.2.tar.bz2 -O teamspeak3-64.tar.bz2 2>&1 | wget_filter
+	tar xjf teamspeak3-64.tar.bz2
+	rm -f teamspeak3-64.tar.bz2
 	if [ -n "$has_license" ]; then
 		# If installer was run previously but did not complete
 		if [ -d "${licensed_server_name}" ]; then
@@ -154,15 +154,15 @@ if [[ ${architecture} == "x86_64" ]]; then
 			rm -rf ${licensed_server_name}
 		fi
 	fi
-	mv teamspeak3-server_linux-amd64 ${server_dir}
+	mv teamspeak3-server_linux_amd64 ${server_dir}
 	cd ${server_dir}
 	chmod +x ts3server_startscript.sh
 else 
 	# You're running 32-bit
 	printf "\n${bold}Downloading latest 32-bit version of TeamSpeak 3${normal}\n"
-	wget --tries=5 --progress=bar:force http://dl.4players.de/ts/releases/3.0.11.2/teamspeak3-server_linux-x86-3.0.11.2.tar.gz -O teamspeak3-32.tar.gz 2>&1 | wget_filter
-	tar xzf teamspeak3-32.tar.gz
-	rm -f teamspeak3-32.tar.
+	wget --tries=5 --progress=bar:force http://dl.4players.de/ts/releases/3.0.12.2/teamspeak3-server_linux_x86-3.0.12.2.tar.bz2 -O teamspeak3-32.tar.bz2 2>&1 | wget_filter
+	tar xjf teamspeak3-32.tar.bz2
+	rm -f teamspeak3-32.tar.bz2
 	if [ -n "$has_license" ]; then
 		# If installer was run previously but did not complete
 		if [ -d "${licensed_server_name}" ]; then
@@ -170,7 +170,7 @@ else
 			rm -rf ${licensed_server_name}
 		fi
 	fi
-	mv teamspeak3-server_linux-x86 ${server_dir}
+	mv teamspeak3-server_linux_x86 ${server_dir}
 	cd ${server_dir}
 	chmod +x ts3server_startscript.sh
 fi
@@ -467,3 +467,4 @@ else
 	printf "\nTeamSpeak 3 configured @ ${bold}$voice_ip:$voice_port${normal}"
 	printf "\n${bold}Usage:${normal} service teamspeak"$([ $has_license ] && echo "-${licensed_server_name}")" start|stop|restart|status|monitor-start|monitor-stop|backup\n"
 fi
+
