@@ -1,5 +1,5 @@
 #!/bin/bash
-# Last Updated - 1/6/15
+# Last Updated - 5/3/15
 # Chris Stokes - https://github.com/stokes84/TeamSpeak-Installer
 #
 # Install Latest
