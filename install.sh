@@ -144,7 +144,7 @@ monitor_name=$([ $has_license ] && echo "monitor_${licensed_server_name}" || ech
 if [[ ${architecture} == "x86_64" ]]; then
 	# You're running 64-bit
 	printf "\n${bold}Downloading latest 64-bit version of TeamSpeak 3${normal}\n"
-	wget --tries=5 --progress=bar:force http://dl.4players.de/ts/releases/3.0.12.2/teamspeak3-server_linux_amd64-3.0.12.2.tar.bz2 -O teamspeak3-64.tar.bz2 2>&1 | wget_filter
+	wget --tries=5 --progress=bar:force http://dl.4players.de/ts/releases/3.0.13.6/teamspeak3-server_linux_amd64-3.0.13.6.tar.bz2 -O teamspeak3-64.tar.bz2 2>&1 | wget_filter
 	tar xjf teamspeak3-64.tar.bz2
 	rm -f teamspeak3-64.tar.bz2
 	if [ -n "$has_license" ]; then
@@ -160,7 +160,7 @@ if [[ ${architecture} == "x86_64" ]]; then
 else 
 	# You're running 32-bit
 	printf "\n${bold}Downloading latest 32-bit version of TeamSpeak 3${normal}\n"
-	wget --tries=5 --progress=bar:force http://dl.4players.de/ts/releases/3.0.12.2/teamspeak3-server_linux_x86-3.0.12.2.tar.bz2 -O teamspeak3-32.tar.bz2 2>&1 | wget_filter
+	wget --tries=5 --progress=bar:force http://dl.4players.de/ts/releases/3.0.13.6/teamspeak3-server_linux_x86-3.0.13.6.tar.bz2 -O teamspeak3-32.tar.bz2 2>&1 | wget_filter
 	tar xjf teamspeak3-32.tar.bz2
 	rm -f teamspeak3-32.tar.bz2
 	if [ -n "$has_license" ]; then
