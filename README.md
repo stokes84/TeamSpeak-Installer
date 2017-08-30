@@ -1,15 +1,11 @@
 <h1 align='center'>TeamSpeak 3 Server Installer</h1>
 
-<br>
-
 Compatibility
 ----------------
 + CentOS 6/7 32bit or 64bit
 + Ubuntu 12/14/16 32bit or 64bit
 + Debian 6/7 32bit or 64bit
 + Fedora 19/20 32bit or 64bit
-
-<br/>
 
 Default Ports
 -----------------
@@ -18,8 +14,6 @@ These need to be open and can be changed during install
 + 30033 TCP - File Transfer
 + 10011 TCP - ServerQuery
 + 2008 TCP - License Check (only needed if using a license)
-
-<br/>
 
 Install
 -----------
@@ -31,8 +25,6 @@ wget --no-check-certificate https://raw.githubusercontent.com/stokes84/TeamSpeak
 <strong>Note:</strong> "SERVER" denotes the server name you set during install.<br/>
 <strong>Note:</strong> TeamSpeak application files are located @ /home/teamspeak/SERVER<br/>
 <strong>Note:</strong> TeamSpeak service file is located @ /etc/rc.d/init.d/teamspeak-SERVER (CentOS) or /etc/init.d/teamspeak-SERVER (Ubuntu) <br/>
-
-<br/>
 
 Usage
 ---------
@@ -51,8 +43,6 @@ Monitor TeamSpeak Server (check & start if needed every 5s): ```service teamspea
 
 Backup TeamSpeak Server (black/white list, ini, and db): ```service teamspeak-SERVER backup```
 
-<br/>
-
 Uninstall
 -------------
 
@@ -61,7 +51,7 @@ Uninstall
 ```
 service teamspeak stop && chkconfig --del teamspeak && rm -f /etc/rc.d/init.d/teamspeak && userdel -r teamspeak
 ```
-<br>
+
 #### Multi-Instance (licensed)
 List all instances installed
 ```
@@ -75,13 +65,13 @@ Remove user lastly if removing all traces of TeamSpeak
 ```
 userdel -r teamspeak
 ```
-<br>
+
 ### Ubuntu / Debian
 #### Single Instance (no license)
 ```
 service teamspeak stop && update-rc.d -f teamspeak remove && rm -f /etc/init.d/teamspeak && userdel -r teamspeak
 ```
-<br>
+
 #### Multi-Instance (licensed)
 List all instances installed
 ```
