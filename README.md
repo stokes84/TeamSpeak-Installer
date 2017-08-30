@@ -45,9 +45,9 @@ Stop TeamSpeak Server: ```service teamspeak-SERVER stop```
 
 Restart TeamSpeak Server: ```service teamspeak-SERVER restart```
 
-Show TeamSpeak Server Status: ```service teamspeak-SERVER monitor```
+Show TeamSpeak Server Status: ```service teamspeak-SERVER status```
 
-Monitor TeamSpeak Server (check & start if needed every 5s): ```service teamspeak-SERVER status```
+Monitor TeamSpeak Server (check & start if needed every 5s): ```service teamspeak-SERVER monitor```
 
 Backup TeamSpeak Server (black/white list, ini, and db): ```service teamspeak-SERVER backup```
 
